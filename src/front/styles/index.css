@@ -29,3 +29,35 @@ a {
     height: 50px;
     border-radius: 100px;
 }
+
+.img-post {
+    max-height: 33.75rem;
+}
+
+.card-title {
+    color: #486572;
+}
+
+.btn-like-comment > i {
+    color: #486572;
+}
+
+.container-form {
+    width: 100%;
+    height: auto;
+    max-width: 400px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+.btn-form {
+    background-color: #486572!important;
+    color: #fff;
+}
+
+.btn-form:hover {
+    background-color: #efeae4!important;
+    color: #486572;
+}
