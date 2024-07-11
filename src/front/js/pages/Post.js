@@ -3,8 +3,8 @@ import React from "react";
 export const Post = () => {
 
     return (
-        <div className="container-fluid">
-            <div className="container-fluid d-flex">
+        <div className="container-fluid mt-5 h-100">
+            <div className="container-fluid d-flex container-back">
                 <i className="fa-solid fa-arrow-left"></i>
             </div>
             <div className="container-fluid d-flex justify-content-center">

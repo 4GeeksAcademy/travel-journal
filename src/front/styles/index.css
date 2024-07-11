@@ -66,6 +66,23 @@ a {
     width: 200px;
 }
 
+.container-back > i {
+    font-size: 2em;
+    cursor: pointer;
+}
+
+.container-back > i:hover {
+    font-size: 2em;
+    color: #486572;
+    cursor: pointer;
+}
+
+#app {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
 .footer {
     background-color: #efeae4!important;
     color: #486572;
