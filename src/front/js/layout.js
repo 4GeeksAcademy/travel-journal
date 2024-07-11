@@ -6,11 +6,10 @@ import { BackendURL } from "./component/backendURL";
 import { Home } from "./pages/home";
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
-
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import { Login } from "./pages/Login";
-
+import { Post } from "./pages/Post";
 //create your first component
 const Layout = () => {
     const basename = process.env.BASENAME || "";
