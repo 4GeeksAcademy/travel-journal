@@ -61,3 +61,18 @@ a {
     background-color: #efeae4!important;
     color: #486572;
 }
+
+.img-logo {
+    width: 200px;
+}
+
+.footer {
+    background-color: #efeae4!important;
+    color: #486572;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 1em 0;
+    text-align: center;
+}
+

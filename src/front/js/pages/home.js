@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { Context } from "../store/appContext";
-import { Login } from "./Login";
 import "../../styles/home.css";
 
 export const Home = () => {
@@ -9,7 +8,7 @@ export const Home = () => {
 	return (
 		<div className="text-center mt-5">
 			
-			<Login/>
+
 		</div>
 	);
 };

@@ -63,6 +63,9 @@ export const Login = () => {
 
     return (
         <div className="container mt-5">
+            <div className="container d-flex justify-content-center">
+             <img className="img-logo mb-5" src="https://raw.githubusercontent.com/AngelikaWebDev/travel-journal/main/src/front/img/logo.png" alt="logotipo trabel journal" />
+            </div>
             <div className="nav justify-content-center d-flex">
                 <ul className="nav nav-tabs">
                     <li className="nav-item">
