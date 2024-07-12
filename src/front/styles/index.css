@@ -1,3 +1,95 @@
 /* 
     General Styles used on every website (Don't Repeat Yourself)
 */
+html, body {
+    margin: 0;
+}
+
+html {
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.navbar {
+    border-bottom: 2px solid #486572;
+}
+
+a {
+    text-decoration: none;
+    
+}
+
+.name-user {
+    color: #486572;
+    font-weight: 600;
+}
+
+.img-user {
+    width: 50px;
+    height: 50px;
+    border-radius: 100px;
+}
+
+.img-post {
+    max-height: 33.75rem;
+}
+
+.card-title {
+    color: #486572;
+}
+
+.btn-like-comment > i {
+    color: #486572;
+}
+
+.container-form {
+    width: 100%;
+    height: auto;
+    max-width: 400px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+.btn-form {
+    background-color: #486572!important;
+    color: #fff;
+}
+
+.btn-form:hover {
+    background-color: #efeae4!important;
+    color: #486572;
+}
+
+.img-logo {
+    width: 200px;
+}
+
+.container-back > i {
+    font-size: 2em;
+    cursor: pointer;
+}
+
+.container-back > i:hover {
+    font-size: 2em;
+    color: #486572;
+    cursor: pointer;
+}
+
+#app {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.footer {
+    background-color: #efeae4!important;
+    color: #486572;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 1em 0;
+    text-align: center;
+}
+
