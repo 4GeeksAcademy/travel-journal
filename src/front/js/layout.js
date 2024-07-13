@@ -10,6 +10,7 @@ import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import { Login } from "./pages/Login";
 import { Post } from "./pages/Post";
+
 //create your first component
 const Layout = () => {
     const basename = process.env.BASENAME || "";

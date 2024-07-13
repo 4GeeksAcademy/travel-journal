@@ -1,0 +1,10 @@
+.card-img-top {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+}
+
+.card {
+    overflow: hidden;
+}
