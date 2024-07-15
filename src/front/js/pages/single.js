@@ -16,14 +16,22 @@ export const Single = () => {
 	}
 
 	return (
-        <div className="single-container">
-			<Link to="/" className="back-home-link">
+		<div>
+		<Link to="/" className="back-home-link">
                 <i className="fa-solid fa-arrow-left"></i>
-            </Link>            
+            </Link>
+        <div className="single-container">            
             <img src={post.image} alt={post.pais} className="single-post-image" />
-            <h6 className="display-4">Titulo Post {post.pais}</h6>
-			<p>{post.text}</p>
+            <div className="d-flex">
+                <h4>Titulo Post {post.pais}</h4>
+                <div className="icons">
+                    <i className="fa-solid fa-comment m-2"></i>
+                    <i className="fa-solid fa-heart m-2"></i>
+                </div>
+            </div>
+            <p>{post.text}</p>
         </div>
+		</div>
     );
 };
 
