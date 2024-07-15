@@ -46,7 +46,7 @@ export const Home = () => {
                                 onChange={handleSearchChange}
                             />
                         </li>
-                        <li><a className="dropdown-item" href="#" onClick={() => handleCountryChange({ target: { value: 'All' } })}>Todos</a></li>
+                        <li><a className="dropdown-item" href="#" onClick={() => handleCountryChange({ target: { value: 'All' } })}>All</a></li>
                         {filteredCountries.map((country, index) => (
                             <li key={index}>
                                 <a className="dropdown-item" href="#" onClick={() => handleCountryChange({ target: { value: country.name.common } })}>
@@ -61,7 +61,7 @@ export const Home = () => {
             <div className="row">
                 {store.filteredPosts && store.filteredPosts.length > 0 ? (
                     store.filteredPosts.map(post => (
-                        <CardPost key={post.id} image={post.image} />
+                        <CardPost key={post.id} id={post.id} image={post.image} />
                     ))
                 ) : (
                     <p>No hay posts disponibles para el país seleccionado.</p>

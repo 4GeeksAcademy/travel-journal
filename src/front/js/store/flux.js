@@ -28,7 +28,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					id: "2",
 					image: "https://www.eleconomista.com.mx/__export/1679363518600/sites/eleconomista/img/2023/03/20/finlandia_auroras_boreales_reuters.jpg_423682103.jpg",
 					text: "Disfruta de la magia de las auroras boreales en Finlandia. Este fenómeno natural ilumina el cielo con impresionantes luces verdes y rosadas, creando una experiencia inolvidable en el corazón del invierno finlandés. Perfecto para los amantes de la naturaleza y la aventura.",
-					pais: "Finlandia"
+					pais: "Finland"
 				},
 				{
 					id: "3",
