@@ -15,13 +15,13 @@ const Layout = () => {
     const basename = process.env.BASENAME || "";
     // console.log("Backend URL:", process.env.BACKEND_URL); 
     // if (!process.env.BACKEND_URL || process.env.BACKEND_URL === "") return <BackendURL />;
-    // const location = useLocation();
-    // const isLoginPage = location.pathname === "/login"; // Para determinar si la página actual es de login
+    const location = useLocation();
+    const isLoginPage = location.pathname === "/login"; // Para determinar si la página actual es de login
 
     return (
         <div>
             <ScrollToTop>
-                {/* {!isLoginPage && <Navbar />} */}
+                {!isLoginPage && <Navbar />}
                 <Routes basename={basename}>
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />

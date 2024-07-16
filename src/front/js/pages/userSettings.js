@@ -26,7 +26,7 @@ const UserSettings = () => {
     setMessage('Profile updated successfully!');
     setTimeout(() => {
       navigate('/');
-    }, 2000); // Redirigir después de 2 segundos
+    }, 2000);
   };
 
   const backButtonStyle = {
@@ -37,37 +37,34 @@ const UserSettings = () => {
   };
 
   return (
-    <div className="container mt-5">
-      <Link to="/" style={backButtonStyle} className="btn btn-link mb-3">←</Link>
-      
-      <div className="row justify-content-between align-items-center mb-3">
-        <div className="col-auto">
-          <img src="https://raw.githubusercontent.com/4GeeksAcademy/travel-journal/main/src/front/img/logotipo.png" alt="logotipo travel journal" className="img-fluid" />
+    <div className="container mt-1">
+     <Link to="/" style={backButtonStyle} className="btn btn-link mb-3">
+        <div className="container-fluid d-flex container-back">
+        <i className="fa-solid fa-arrow-left" style={{ fontSize: '1.5rem' }}></i>
         </div>
-        <div className="col text-center">
-          <h2 className="mb-0">Modificar Perfil</h2>
-        </div>
-      </div>
+     </Link>
 
+      <div className="row justify-content-start mb-1">
+      </div>
       {message && <p className={`text-center ${message.includes('successfully') ? 'text-success' : 'text-danger'}`}>{message}</p>}
       <form onSubmit={handleSubmit} className="d-flex flex-column align-items-center">
         <div className="mb-3 text-center">
           {profileImage ? (
-            <img src={profileImage} alt="Vista previa" className="rounded-circle" style={{ width: '150px', height: '150px' }} />
+            <img src={profileImage} alt="Vista previa" style={{ width: '300px', height: '300px', objectFit: 'cover', display: 'block', margin: '0 auto 20px auto' }} />
           ) : (
-            <div className="rounded-circle bg-light d-flex align-items-center justify-content-center" style={{ width: '150px', height: '150px' }}>
+            <div className="bg-light d-flex align-items-center justify-content-center" style={{ width: '300px', height: '300px', marginBottom: '20px' }}>
               Imagen de Perfil
             </div>
           )}
           <input type="file" id="profileImage" name="profileImage" onChange={handleImageChange} className="d-none" />
-          <label htmlFor="profileImage" className="btn btn-primary mt-2">Insertar imagen</label>
+          <label htmlFor="profileImage" className="btn btn-secondary" style={{ display: 'inline-block', margin: '0 auto', fontSize: '0.75rem', padding: '5px 10px', marginBottom: '99px' }}>Insertar imagen</label>
         </div>
-        <div className="mb-3 w-75">
-          <label htmlFor="username" className="form-label">Modificar nombre de usuario</label>
-          <input type="text" id="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)} className="form-control" placeholder="Username" />
+        <div className="mb-3 w-10 text-center">
+          <label htmlFor="username" className="form-label" style={{ fontSize: '1.5rem' }}>Modificar nombre de usuario</label>
+          <input type="text" id="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)} className="form-control text-center" placeholder="Username" />
         </div>
-        <div className="w-100 d-flex justify-content-end">
-          <button type="submit" className="btn btn-warning">Aceptar</button>
+        <div className="w-100 d-flex justify-content-end mt-4">
+        <button type="submit" className="btn btn-form" style={{ fontSize: '1.25rem', padding: '10px 20px', backgroundColor: '#f0ad4e', borderColor: '#eea236' }}>Aceptar</button>
         </div>
       </form>
     </div>
