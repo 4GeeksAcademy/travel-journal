@@ -17,7 +17,7 @@ export const Home = () => {
     }, [store.selectedCountry]);
 
     const handleCountryChange = (e) => {
-        const selectedCountry = e.target.value === "All" ? '' : e.target.value;
+        const selectedCountry = e.target.value === "Todos" ? '' : e.target.value;
         actions.setSelectedCountry(selectedCountry);
         setSearchTerm("");
     };
@@ -35,19 +35,19 @@ export const Home = () => {
             <div className="text-center">
                 <div className="dropdown">
                     <button className="btn btn-form dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                        {store.selectedCountry || 'Selecciona un país'}
+                        {store.selectedCountry || 'Select a country'}
                     </button>
                     <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         <li>
                             <input
                                 type="text"
                                 className="form-control"
-                                placeholder="Buscar..."
+                                placeholder="Search..."
                                 value={searchTerm}
                                 onChange={handleSearchChange}
                             />
                         </li>
-                        <li><a className="dropdown-item" href="#" onClick={() => handleCountryChange({ target: { value: 'All' } })}>All</a></li>
+                        <li><a className="dropdown-item" href="#" onClick={() => handleCountryChange({ target: { value: 'All' } })}>All countries</a></li>
                         {filteredCountries.map((country, index) => (
                             <li key={index}>
                                 <a className="dropdown-item" href="#" onClick={() => handleCountryChange({ target: { value: country.name.common } })}>
@@ -58,14 +58,14 @@ export const Home = () => {
                     </ul>
                 </div>
             </div>
-            <h5>{store.selectedCountry || 'Selecciona un país'}</h5>
+            <h5>{store.selectedCountry || 'Select a country'}</h5>
             <div className="row">
                 {store.filteredPosts && store.filteredPosts.length > 0 ? (
                     store.filteredPosts.map(post => (
                         <CardPost key={post.id} id={post.id} image={post.image} />
                     ))
                 ) : (
-                    <p>No hay posts disponibles para el país seleccionado.</p>
+                    <p>There are no posts available for the selected country.</p>
                 )}
             </div>
         </div>
