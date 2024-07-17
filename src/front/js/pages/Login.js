@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { Context } from '../store/appContext'; // Ruta corregida
 
 export const Login = () => {
+    const { store, actions } = useContext(Context);
     const [showRegistro, setShowRegistro] = useState(true);
     const [formData, setFormData] = useState({
         username: "",
@@ -27,17 +29,7 @@ export const Login = () => {
         });
     };
 
-    const validateEmail = (email) => {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-    };
-
-    const validatePassword = (password) => {
-        const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        return re.test(password);
-    };
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         let validationErrors = {};
 
@@ -45,26 +37,30 @@ export const Login = () => {
             validationErrors.username = "El nombre de usuario es requerido";
         }
 
-        if (showRegistro && !validateEmail(formData.email)) {
-            validationErrors.email = "El correo electrónico no es válido";
+        if (!formData.email) {
+            validationErrors.email = "El correo electrónico es requerido";
         }
 
-        if (!validatePassword(formData.password)) {
+        if (!formData.password) {
             validationErrors.password = "La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y un carácter especial";
         }
 
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
         } else {
-            // Aquí puedes manejar el envío del formulario si no hay errores
-            console.log("Formulario enviado con éxito", formData);
+            const success = await actions.registerUser(formData);
+            if (success) {
+                console.log("Usuario registrado con éxito");
+            } else {
+                console.log("Error al registrar usuario:", store.error);
+            }
         }
     };
 
     return (
         <div className="container mt-5">
             <div className="container d-flex justify-content-center">
-             <img className="img-logo mb-5" src="https://raw.githubusercontent.com/AngelikaWebDev/travel-journal/main/src/front/img/logo.png" alt="logotipo trabel journal" />
+                <img className="img-logo mb-5" src="https://raw.githubusercontent.com/AngelikaWebDev/travel-journal/main/src/front/img/logo.png" alt="logotipo travel journal" />
             </div>
             <div className="nav justify-content-center d-flex">
                 <ul className="nav nav-tabs">
