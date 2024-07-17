@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 import "../../styles/home.css";
+import "../../styles/index.css"
 import CardPost from "../component/cardPost";
 
 export const Home = () => {
@@ -16,7 +17,7 @@ export const Home = () => {
     }, [store.selectedCountry]);
 
     const handleCountryChange = (e) => {
-        const selectedCountry = e.target.value === "Todos" ? '' : e.target.value;
+        const selectedCountry = e.target.value === "All" ? '' : e.target.value;
         actions.setSelectedCountry(selectedCountry);
         setSearchTerm("");
     };
@@ -33,7 +34,7 @@ export const Home = () => {
         <div className="m-5">
             <div className="text-center">
                 <div className="dropdown">
-                    <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button className="btn btn-form dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                         {store.selectedCountry || 'Selecciona un país'}
                     </button>
                     <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">

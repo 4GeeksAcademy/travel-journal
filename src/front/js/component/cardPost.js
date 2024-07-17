@@ -6,7 +6,7 @@ const CardPost = ({ id, image }) => {
     const navigate = useNavigate();
 
     const handleClick =()=>{
-        navigate(`/single/${id}`);
+        navigate(`/post/${id}`);
     };
 
     return (
