@@ -36,7 +36,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					id: "3",
 					image: "https://elcomercio.pe/resizer/9h5JgBRT0YvnFbtgXCluI6iIT5g=/1200x1200/smart/filters:format(jpeg):quality(75)/arc-anglerfish-arc2-prod-elcomercio.s3.amazonaws.com/public/ZIM73X76WJHC5HOC4WV6OWIS7M.jpg",
 					text: "Viviendo el sueño en Egipto. Mis pies descansan en la arena mientras la majestuosa Pirámide de Giza se alza en el horizonte. Un momento de paz en medio de la historia antigua.",
-					pais: "Egipto",
+					pais: "Egipt",
 					autor: "Alberto"
 				},
 				{
@@ -57,14 +57,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 					id: "6",
 					image: "https://www.mundoasiatours.com/wp-content/uploads/2018/07/angkor-wat-88.jpg",
 					text: "Primer viaje a los 45 años y estoy en Angkor Wat. Este lugar es increíble, una experiencia que nunca imaginé vivir. La majestuosidad de los templos es realmente impresionante. ¡Nunca es tarde para empezar a explorar el mundo!",
-					pais: "Camboya",
+					pais: "Cambodia",
 					autor: "Luis"
 				},
 				{
 					id: "7",
 					image: "https://www.travelwithpau.com/wp-content/uploads/2018/08/krakow.png",
 					text: "Explorando Cracovia por primera vez. La ciudad tiene un encanto único con sus calles empedradas y edificios históricos. Cada rincón cuenta una historia, y no puedo esperar para descubrir más de esta hermosa ciudad.",
-					pais: "Polonia",
+					pais: "Poland",
 					autor: "Clara"
 				},
 				{
