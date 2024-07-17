@@ -5,7 +5,7 @@ import Layout from "./layout";
 
 const App = () => {
     return (
-        <BrowserRouter>
+        <BrowserRouter>        
             <Layout />
         </BrowserRouter>
     );
