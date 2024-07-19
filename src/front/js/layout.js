@@ -51,7 +51,7 @@ import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import { Login } from "./pages/Login";
 import { Post } from "./pages/Post";
-import UserSettings from "./pages/userSettings";
+
 //create your first component
 const Layout = () => {
     const basename = process.env.BASENAME || "";
@@ -64,7 +64,7 @@ const Layout = () => {
                 {!isLoginPage && <Navbar />}
                 <Routes basename={basename}>
                     <Route element={<Login />} path="/login" />
-                    <Route element={<Post />} path="/post" />
+                    <Route element={<Post />} path="/post/:theid" />
                     <Route element={<Home />} path="/" />
 					<Route element={<UserSettings />} path="/settings" />
                     <Route element={<Demo />} path="/demo" />
