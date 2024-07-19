@@ -122,34 +122,95 @@ const getState = ({ getStore, getActions, setStore }) => {
 				getActions().changeColor(0, "green");
 			},
 
-			getMessage: async () => {
-				try{
-					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
-					const data = await resp.json()
-					setStore({ message: data.message })
-					// don't forget to return something, that is how the async resolves
-					return data;
-				}catch(error){
-					console.log("Error loading message from backend", error)
+            getMessage: async () => {
+                try {
+                    const resp = await fetch(process.env.BACKEND_URL + "/api/hello");
+                    const data = await resp.json();
+                    setStore({ message: data.message });
+                    return data;
+                } catch (error) {
+                    console.log("Error loading message from backend", error);
+                }
+            },
+
+            changeColor: (index, color) => {
+                const store = getStore();
+                const demo = store.demo.map((elm, i) => {
+                    if (i === index) elm.background = color;
+                    return elm;
+                });
+                setStore({ demo: demo });
+            },
+
+			loginUser : async (username, password) => {
+				const resp = await fetch(`https://automatic-system-rq66vjwx5w635v45-3001.app.github.dev/api/login`, { 
+					 method: "POST",
+					 headers: { "Content-Type": "application/json" },
+					 body: JSON.stringify({ username, password }) 
+				})
+		   
+				if(!resp.ok) throw Error("There was a problem in the login request")
+		   
+				if(resp.status === 401){
+					 throw("Invalid credentials")
 				}
-			},
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
+				else if(resp.status === 400){
+					 throw ("Invalid email or password format")
+				}
+				const data = await resp.json()
+				localStorage.setItem("jwt-token", data.token);
+		   
+				return data
+		   },
 
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
-
-				//reset the global store
-				setStore({ demo: demo });
+		 getMyTasks : async () => {
+			// Recupera el token desde la localStorage
+			const token = localStorage.getItem('jwt-token');
+	   
+			const resp = await fetch(`https://automatic-system-rq66vjwx5w635v45-3001.app.github.dev/api/protected`, {
+			   method: 'GET',
+			   headers: { 
+				 "Content-Type": "application/json",
+				 'Authorization': 'Bearer ' + token // ⬅⬅⬅ authorization token
+			   } 
+			});
+	   
+			if(!resp.ok) {
+				 throw Error("There was a problem in the login request")
+			} else if(resp.status === 403) {
+				 throw Error("Missing or invalid token");
+			} else {
+				throw Error("Unknown error");
 			}
+	   
+			const data = await resp.json();
+			console.log("This is the data you requested", data);
+			return data
+	   },
+
+	   registerUser : async (formData) => {
+		try {
+			const response = await fetch(`${process.env.BACKEND_URL}/api/register`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(formData),
+			});
+	
+			if (response.ok) {
+				return { success: true };
+			} else {
+				const errorData = await response.json();
+				return { success: false, message: errorData.message };
+			}
+		} catch (error) {
+			return { success: false, message: "Error en la solicitud" };
 		}
-	};
+	},
+	
+        }
+    };
 };
 
 export default getState;
