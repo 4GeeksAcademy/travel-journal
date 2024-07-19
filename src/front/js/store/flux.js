@@ -142,28 +142,73 @@ const getState = ({ getStore, getActions, setStore }) => {
                 setStore({ demo: demo });
             },
 
-            registerUser: async (userData) => {
-                try {
-                    const response = await fetch("https://automatic-system-rq66vjwx5w635v45-3001.app.github.dev/register", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(userData)
-                    });
+			loginUser : async (username, password) => {
+				const resp = await fetch(`https://automatic-system-rq66vjwx5w635v45-3001.app.github.dev/api/login`, { 
+					 method: "POST",
+					 headers: { "Content-Type": "application/json" },
+					 body: JSON.stringify({ username, password }) 
+				})
+		   
+				if(!resp.ok) throw Error("There was a problem in the login request")
+		   
+				if(resp.status === 401){
+					 throw("Invalid credentials")
+				}
+				else if(resp.status === 400){
+					 throw ("Invalid email or password format")
+				}
+				const data = await resp.json()
+				localStorage.setItem("jwt-token", data.token);
+		   
+				return data
+		   },
 
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
+		 getMyTasks : async () => {
+			// Recupera el token desde la localStorage
+			const token = localStorage.getItem('jwt-token');
+	   
+			const resp = await fetch(`https://automatic-system-rq66vjwx5w635v45-3001.app.github.dev/api/protected`, {
+			   method: 'GET',
+			   headers: { 
+				 "Content-Type": "application/json",
+				 'Authorization': 'Bearer ' + token // ⬅⬅⬅ authorization token
+			   } 
+			});
+	   
+			if(!resp.ok) {
+				 throw Error("There was a problem in the login request")
+			} else if(resp.status === 403) {
+				 throw Error("Missing or invalid token");
+			} else {
+				throw Error("Unknown error");
+			}
+	   
+			const data = await resp.json();
+			console.log("This is the data you requested", data);
+			return data
+	   },
 
-                    const data = await response.json();
-                    console.log("Usuario registrado con éxito");
-                    return true;
-                } catch (error) {
-                    console.error('Error al registrar usuario:', error);
-                    return false;
-                }
-            }
+	   registerUser : async (formData) => {
+		try {
+			const response = await fetch(`${process.env.BACKEND_URL}/api/register`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(formData),
+			});
+	
+			if (response.ok) {
+				return { success: true };
+			} else {
+				const errorData = await response.json();
+				return { success: false, message: errorData.message };
+			}
+		} catch (error) {
+			return { success: false, message: "Error en la solicitud" };
+		}
+	},
+	
         }
     };
 };

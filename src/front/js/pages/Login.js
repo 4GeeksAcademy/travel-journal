@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
-import { Context } from '../store/appContext'; // Ruta corregida
+import { Context } from '../store/appContext';
+import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
     const { store, actions } = useContext(Context);
@@ -10,6 +11,7 @@ export const Login = () => {
         password: "",
     });
     const [errors, setErrors] = useState({});
+    const navigate = useNavigate();
 
     const handleShowRegistro = () => {
         setShowRegistro(true);
@@ -29,31 +31,60 @@ export const Login = () => {
         });
     };
 
-    const handleSubmit = async (e) => {
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const validatePassword = (password) => {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+        return passwordRegex.test(password);
+    };
+
+    const handleSubmitRegistro = async (e) => {
         e.preventDefault();
         let validationErrors = {};
-
+    
         if (!formData.username) {
             validationErrors.username = "El nombre de usuario es requerido";
         }
-
+    
         if (!formData.email) {
             validationErrors.email = "El correo electrónico es requerido";
+        } else if (!validateEmail(formData.email)) {
+            validationErrors.email = "El correo electrónico no es válido";
         }
-
+    
         if (!formData.password) {
+            validationErrors.password = "La contraseña es requerida";
+        } else if (!validatePassword(formData.password)) {
             validationErrors.password = "La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y un carácter especial";
         }
-
+    
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
         } else {
-            const success = await actions.registerUser(formData);
-            if (success) {
+            const response = await actions.registerUser(formData);
+            if (response.success) {
+                setErrors({});
                 console.log("Usuario registrado con éxito");
+                navigate('/');
             } else {
-                console.log("Error al registrar usuario:", store.error);
+                setErrors({ general: response.message });
             }
+        }
+    };
+    
+
+    const handleSubmitLogin = async (e) => {
+        e.preventDefault();
+        const success = await actions.loginUser({ username: formData.username, password: formData.password });
+        if (success) {
+            setErrors({});
+            console.log("Login exitoso");
+            navigate('/');
+        } else {
+            setErrors({ general: "Credenciales inválidas" });
         }
     };
 
@@ -94,7 +125,7 @@ export const Login = () => {
             <div className="d-flex justify-content-center">
                 {showRegistro ? (
                     <div className="container-form">
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleSubmitRegistro}>
                             <div className="mb-3">
                                 <label htmlFor="username" className="form-label text-start w-100">Username</label>
                                 <input
@@ -107,8 +138,7 @@ export const Login = () => {
                                     onChange={handleChange}
                                     required
                                 />
-                                {errors.username && <div className="form-text text-danger text-start">{errors.username}</div>}
-                            </div>
+                            {errors.username && <div className="form-text text-danger text-start">{errors.username}</div>}                            </div>
                             <div className="mb-3">
                                 <label htmlFor="email" className="form-label text-start w-100">Email address</label>
                                 <input
@@ -141,6 +171,11 @@ export const Login = () => {
                                 <input type="checkbox" className="form-check-input me-3" id="exampleCheck1" required />
                                 <label className="form-check-label text-start" htmlFor="exampleCheck1">Aceptar política de privacidad</label>
                             </div>
+                            {errors.general && (
+                            <div id="emailHelp" className="form-text text-danger">
+                                {errors.general}
+                            </div>
+                        )}
                             <div className="container container-btn d-flex justify-content-end">
                                 <button type="submit" className="btn btn-form">Enviar</button>
                             </div>
@@ -148,7 +183,7 @@ export const Login = () => {
                     </div>
                 ) : (
                     <div className="container-form">
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleSubmitLogin}>
                             <div className="mb-3">
                                 <label htmlFor="username" className="form-label text-start w-100">Username</label>
                                 <input
@@ -177,6 +212,7 @@ export const Login = () => {
                                 />
                                 {errors.password && <div className="form-text text-danger text-start">{errors.password}</div>}
                             </div>
+                            {errors.general && <div className="form-text text-danger text-start">{errors.general}</div>}
                             <div className="container container-btn d-flex justify-content-end">
                                 <button type="submit" className="btn btn-form">Enviar</button>
                             </div>
