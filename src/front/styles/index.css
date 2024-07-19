@@ -19,6 +19,12 @@ a {
     
 }
 
+.dashboard-icons {
+    margin-left: auto;
+    display: flex;
+    align-items: center;    
+}
+
 .name-user {
     color: #486572;
     font-weight: 600;
