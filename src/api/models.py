@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime, timezone
 
 db = SQLAlchemy()
 
@@ -24,4 +25,23 @@ class User(db.Model):
 class Post(db.Model):
     id = db.Column(db.Integrer, primary_key=True)
     title = db.Column(db.String(250), nullable=False)
-    description = db.Column(db.String)
+    description = db.Column(db.Text, nullable=False)
+    date = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
+    country = db.Column(db.String(100), nullable=False)
+    image = db.Column(db.String(200), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', backref=db.backref('posts', lazy=True))
+
+    def __repr__(self):
+        return f'<Post {self.title}>'
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            "date": self.date.isoformat(),
+            "country": self.country,
+            "image": self.image,
+            "user_id": self.user_id,
+        }
