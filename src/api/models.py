@@ -17,3 +17,8 @@ class User(db.Model):
             "email": self.email,
             # do not serialize the password, its a security breach
         }
+    
+class Post(db.Model):
+    id = db.Column(db.Integrer, primary_key=True)
+    title = db.Column(db.String(250), nullable=False)
+    description = db.Column(db.String)
