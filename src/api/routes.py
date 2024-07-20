@@ -3,7 +3,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, jwt_required,unset_jwt_cookies
-from api.models import db, User
+from api.models import db, User, Post
 from sqlalchemy.exc import SQLAlchemyError
 from api.utils import APIException
 from flask_cors import CORS
@@ -14,7 +14,37 @@ api = Blueprint('api', __name__)
 CORS(api)
 CORS(api, resources={r"/*": {"origins": "https://automatic-system-rq66vjwx5w635v45-3000.app.github.dev"}})
 
+#addpost
+@api.route('/addPost', methods=['POST'])
+def add_post():
+    data = request.get_json()
+    title = data.get('title')
+    description = data.get('description')
+    country = data.get('country')
+    image = data.get('image')
+    user_id = data.get('user_id')
 
+    if not title or not description or not country or not image or not user_id:
+        return jsonify({'message': 'All data are required'}), 400
+    try:
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+        new_post = Post(
+            title = title,
+            description = description,
+            country = country,
+            image = image,
+            user_id = user_id
+        )
+        db.session.add(new_post)
+        db.session.commit()
+
+        return jsonify({'message': 'Post created successfully', 'post': new_post.serialize()}), 201
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+
+#addpost
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
 
