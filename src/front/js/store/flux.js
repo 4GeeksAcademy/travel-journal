@@ -117,6 +117,33 @@ const getState = ({ getStore, getActions, setStore }) => {
                 );
                 setStore({ filteredPosts });
             },
+			//add a post
+			addAPost: async(title, description, country, image, user_id) =>{
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/addPost`, {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({title, description, country, image, user_id})
+					});
+					if (!response.ok) {
+						const errorData = await response.json();
+						throw new Error(errorData.message || "Error adding post")
+					}
+
+					const newPost = await response.json();
+					const store = getStore();
+					setStore({postExample: [...store.postExample, newPost.post]});
+					return {success: true, post: newPost.post};
+					
+				} catch (error) {
+					console.error("Error adding post:", error);
+					return { success: false, message: error.message };					
+				}
+			},
+
+			//add a post
 			// Use getActions to call a function within a fuction
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");

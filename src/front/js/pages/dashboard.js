@@ -13,7 +13,10 @@ export const Dashboard = () => {
                 </Link>
             </div>
             <div className="d-flex justify-content-center">
-                <button className="btn btn-form m-3" >Add a new Post</button></div>
+                <Link to="/addAPost">
+                <button className="btn btn-form m-3" >Add a new Post</button>
+                </Link>
+                </div>
             <div className="container-fluid d-flex justify-content-center">            
                 <div className="card" style={{ width: "50rem" }}>
                     <div className="card-head p-3 d-flex align-items-center">

@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
-
+import AddPostForm from "./pages/addPostForm";
 import { Home } from "./pages/home";
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
@@ -31,6 +31,7 @@ const Layout = () => {
                     <Route element={<Home />} path="/" />
                     <Route element={<Demo />} path="/demo" />
                     <Route element={<Dashboard />} path="/dashboard" />
+                    <Route element={<AddPostForm />} path="/AddAPost" />
                     <Route element={<Single />} path="/single/:theid" />
                     <Route element={<h1>Not found!</h1>} />
                 </Routes>
