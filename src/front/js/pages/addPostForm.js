@@ -35,6 +35,14 @@ const AddPostForm = () => {
                 <label for="imageUrl" class="form-label">Image url</label>
                 <input type="text" value={image} class="form-control" onChange={(e) => setImage(e.target.value)} required />                
             </div>
+            <div className="mb-3">
+                <label for="country" class="form-label">Country</label>
+                <input type="text" value={country} class="form-control" onChange={(e) => setCountry(e.target.value)} required />                
+            </div>
+            <div className="mb-3">
+                <label for="user_id" class="form-label">User id</label>
+                <input type="text" value={user_id} class="form-control" onChange={(e) => setUserId(e.target.value)} required />                
+            </div>
                         
             <button type="submit" class="btn btn-primary">Add Post</button>
         </form>
