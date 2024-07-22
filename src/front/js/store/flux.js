@@ -120,7 +120,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			//add a post
 			addAPost: async(title, description, country, image, user_id) =>{
 				try {
-					const response = await fetch(`https://automatic-system-rq66vjwx5w635v45-3001.app.github.dev/api/addPost`, {
+					const response = await fetch(process.env.BACKEND_URL + `/api/addPost`, {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",

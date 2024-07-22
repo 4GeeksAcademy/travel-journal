@@ -58,7 +58,7 @@ def handle_hello():
 def get_users():
     try:
         users = User.query.all()
-        usernames = [user.username for user in users]
+        usernames = [user.serialize() for user in users]
         return jsonify(usernames), 200
     
     except Exception as e:
