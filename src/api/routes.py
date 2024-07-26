@@ -1,18 +1,21 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
-from flask import Blueprint, request, jsonify
+from flask import Flask, Blueprint, request, jsonify
+from flask_cors import CORS, cross_origin
 from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, jwt_required,unset_jwt_cookies
 from api.models import db, User
 from sqlalchemy.exc import SQLAlchemyError
 from api.utils import APIException
-from flask_cors import CORS
 
-api = Blueprint('api', __name__)
+
+
+app = Flask(__name__)
+api = Blueprint('api', __name__) 
 
 # Allow CORS requests to this API
 CORS(api)
-CORS(api, resources={r"/*": {"origins": "https://automatic-system-rq66vjwx5w635v45-3000.app.github.dev"}})
+CORS(app, resources={r"/*": {"origins": "https://reimagined-xylophone-976qw9x7wqg739rvw-3000.app.github.dev"}})
 
 
 @api.route('/hello', methods=['POST', 'GET'])
@@ -23,6 +26,7 @@ def handle_hello():
     }
 
     return jsonify(response_body), 200
+
 
 @api.route('/users', methods=['GET'])
 def get_users():
@@ -92,6 +96,43 @@ def protected():
     user = User.query.get(current_user_id)
     
     return jsonify({"id": user.id, "username": user.username }), 200
+
+@api.route('/upload_profile_image', methods=['POST'])
+@jwt_required()
+def upload_profile_image():
+    try:
+        data = request.get_json()
+        image_url = data.get('image_url')
+
+        if not image_url:
+            return jsonify({'message': 'No image URL provided'}), 400
+
+        current_user_id = get_jwt_identity()
+        user = User.query.get(current_user_id)
+        user.image = image_url
+        db.session.commit()
+
+        return jsonify({'message': 'Image URL saved successfully', 'image_url': image_url}), 200
+    except Exception as e:
+        return jsonify({'message': 'Error uploading image: ' + str(e)}), 500
+
+
+
+@api.route('/update_user', methods=['PUT'])
+@jwt_required()
+def update_user():
+    data = request.get_json()
+    current_user_id = get_jwt_identity()
+    username = data.get('username')
+
+    user = User.query.get(current_user_id)
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+
+    user.username = username
+    db.session.commit()
+    return jsonify({'message': 'User updated successfully'})
+
 
 if __name__ == '__main__':
     api.run(debug=True)

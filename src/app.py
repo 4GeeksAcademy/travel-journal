@@ -27,12 +27,15 @@ else:
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["JWT_SECRET_KEY"] = "super-secret"
+# app.config['UPLOAD_FOLDER'] = 'uploads'
+
 
 # Initialize extensions
 MIGRATE = Migrate(app, db, compare_type=True)
 db.init_app(app)
 jwt = JWTManager(app)
 CORS(app)
+
 
 # Add the admin
 setup_admin(app)

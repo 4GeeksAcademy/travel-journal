@@ -9,7 +9,7 @@
 // import { Footer } from "./component/footer";
 // import { Login } from "./pages/Login";
 // import { Post } from "./pages/Post";
-// import UserSettings from "./pages/userSettings";
+
 
 // const Layout = () => {
 //     const basename = process.env.BASENAME || "";
@@ -51,6 +51,7 @@ import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import { Login } from "./pages/Login";
 import { Post } from "./pages/Post";
+import UserSettings from "./pages/userSettings";
 
 //create your first component
 const Layout = () => {

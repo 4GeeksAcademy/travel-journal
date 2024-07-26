@@ -1,33 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/index.css';
+import { Context } from '../store/appContext';
 
 const UserSettings = () => {
+  const { actions, store } = useContext(Context);
   const [username, setUsername] = useState('');
-  const [profileImage, setProfileImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState('');
   const [message, setMessage] = useState('');
+  const [imageMessage, setImageMessage] = useState('');
   const navigate = useNavigate();
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setProfileImage(reader.result);
-    };
-    reader.readAsDataURL(file);
+  const handleImageInsert = () => {
+    const url = prompt("Por favor, introduce la URL de la imagen:");
+    if (url) {
+      setImageUrl(url);
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage('');
+    setImageMessage('');
     if (username.trim() === '') {
-      setMessage('Username cannot be empty.');
+      setMessage('El nombre de usuario no puede estar vacío.');
       return;
     }
-    setMessage('Profile updated successfully!');
-    setTimeout(() => {
-      navigate('/');
-    }, 2000);
+
+    try {
+      if (imageUrl) {
+        const result = await actions.uploadProfileImage(imageUrl);
+        setImageMessage(result.message || '');
+        if (result.message && result.message.includes('Error')) {
+          throw new Error(result.message);
+        }
+      }
+      const result = await actions.updateUser(store.userId, username);
+      setMessage(result.message || '');
+      if (result.message && result.message.includes('Error')) {
+        throw new Error(result.message);
+      }
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
+    } catch (error) {
+      setMessage(`Error updating user: ${error.message}`);
+    }
   };
 
   return (
@@ -44,22 +63,26 @@ const UserSettings = () => {
           {message}
         </p>
       )}
+      {imageMessage && (
+        <p className={`text-center ${imageMessage.includes('successfully') ? 'text-success' : 'text-danger'}`}>
+          {imageMessage}
+        </p>
+      )}
       <form onSubmit={handleSubmit} className="d-flex flex-column align-items-center">
         <div className="mb-3 text-center">
-          {profileImage ? (
-            <img src={profileImage} alt="Vista previa" className="profile-image" />
+          {imageUrl ? (
+            <img src={imageUrl} alt="Vista previa" className="profile-image" />
           ) : (
             <div className="bg-light d-flex align-items-center justify-content-center placeholder-image">
               Imagen de Perfil
             </div>
           )}
-          <input type="file" id="profileImage" name="profileImage" onChange={handleImageChange} className="d-none" />
-          <label htmlFor="profileImage" className="btn btn-secondary insert-image-label">
+          <button type="button" onClick={handleImageInsert} className="btn btn-secondary insert-image-label">
             Insertar imagen
-          </label>
+          </button>
         </div>
-        <div className="mb-3 w-10 text-center">
-          <label htmlFor="username" className="form-label username-label">
+        <div className="mb-3 w-50 text-center">
+          <label htmlFor="username" className="form-label">
             Modificar nombre de usuario
           </label>
           <input
