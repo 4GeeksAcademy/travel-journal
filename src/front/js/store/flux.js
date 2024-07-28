@@ -16,6 +16,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			],
 			countries:[],
 			selectedCountry: '',
+			posts:[],
 
 			postExample: [
 				{
@@ -91,11 +92,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 			],
 
 		},
-
-		
-
-
 		actions: {
+			getPosts: async () => {
+				try {
+					const response = await fetch(process.env.BACKEND_URL + `/api/getPosts`);
+					const data = await response.json();
+					setStore({ posts: data });
+					console.log(data);					
+				} catch (error) {
+					console.error("Error fetching posts:", error);
+					
+				}
+			},
 			getCountries: async () => {
 				try {
 					const response = await fetch("https://restcountries.com/v3.1/all");
@@ -235,6 +243,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			return { success: false, message: "Error en la solicitud" };
 		}
 	},
+	
 	
         }
     };

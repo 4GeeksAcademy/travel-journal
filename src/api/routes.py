@@ -14,6 +14,18 @@ api = Blueprint('api', __name__)
 CORS(api)
 CORS(api, resources={r"/*": {"origins": "https://automatic-system-rq66vjwx5w635v45-3000.app.github.dev"}})
 
+#GET POSTS
+@api.route('/getPosts', methods=['GET'])
+def get_posts():
+    try:
+        posts = Post.query.all()
+        posts = [post.serialize() for post in posts]
+        return jsonify(posts), 200
+    
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+
+
 #addpost
 @api.route('/addPost', methods=['POST'])
 def add_post():

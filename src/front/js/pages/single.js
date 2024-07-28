@@ -23,7 +23,7 @@ export const Single = () => {
         <div className="single-container">            
             <img src={post.image} alt={post.pais} className="single-post-image" />
             <div className="d-flex">
-                <h4>Titulo Post {post.pais}</h4>
+                <h4>Titulo Post </h4>
                 <div className="icons">
                     <i className="fa-solid fa-comment m-2"></i>
                     <i className="fa-solid fa-heart m-2"></i>

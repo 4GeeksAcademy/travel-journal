@@ -11,6 +11,10 @@ export const Home = () => {
     useEffect(() => {
         actions.getCountries();
     }, []);
+    
+    useEffect(() => {
+        actions.getPosts();
+    }, []);
 
     useEffect(() => {
         actions.filterPostsByCountry();
