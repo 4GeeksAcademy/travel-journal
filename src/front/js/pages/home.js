@@ -3,6 +3,8 @@ import { Context } from "../store/appContext";
 import "../../styles/home.css";
 import "../../styles/index.css"
 import CardPost from "../component/cardPost";
+import { Link } from "react-router-dom";
+
 
 export const Home = () => {
     const { store, actions } = useContext(Context);
@@ -36,6 +38,11 @@ export const Home = () => {
 
 	return (
         <div className="m-5">
+            <div className="d-flex justify-content-end">
+                <Link to="/dashboard">
+                <button className="btn btn-form">My Posts</button>
+                </Link>
+                </div>
             <div className="text-center">
                 <div className="dropdown">
                     <button className="btn btn-form dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">

@@ -12,7 +12,7 @@ const AddPostForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const result = await actions.addAPost(title,description,country,image,user_id)
+        const result = await actions.addAPost(title,description,country,image)
         if (result.success) {
             alert("Post created successfully!");
         } else {
@@ -39,10 +39,7 @@ const AddPostForm = () => {
                 <label for="country" class="form-label">Country</label>
                 <input type="text" value={country} class="form-control" onChange={(e) => setCountry(e.target.value)} required />                
             </div>
-            <div className="mb-3">
-                <label for="user_id" class="form-label">User id</label>
-                <input type="text" value={user_id} class="form-control" onChange={(e) => setUserId(e.target.value)} required />                
-            </div>
+            
                         
             <button type="submit" class="btn btn-primary">Add Post</button>
         </form>
