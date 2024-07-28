@@ -11,7 +11,7 @@ export const Home = () => {
     useEffect(() => {
         actions.getCountries();
     }, []);
-    
+
     useEffect(() => {
         actions.getPosts();
     }, []);
@@ -21,7 +21,7 @@ export const Home = () => {
     }, [store.selectedCountry]);
 
     const handleCountryChange = (e) => {
-        const selectedCountry = e.target.value === "Todos" ? '' : e.target.value;
+        const selectedCountry = e.target.value === "All" ? '' : e.target.value;
         actions.setSelectedCountry(selectedCountry);
         setSearchTerm("");
     };

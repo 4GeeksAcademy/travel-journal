@@ -9,10 +9,10 @@ import "../../styles/post.css"
 export const Post = () => {
     const { store, actions } = useContext(Context);
 	const params = useParams();
-    const post = store.postExample ? store.postExample.find(p => p.id === params.theid) : null;
+    const post = store.posts ? store.posts.find(p => p.id === params.theid) : null;
 
 	if(!post) {
-		return <div>Post no encontrado.</div>;
+		return <div>Post not found.</div>;
 	}
 
     return (
@@ -31,14 +31,14 @@ export const Post = () => {
                     <img src={post.image} className="card-img-top img-post" alt="..." />
                     <div className="card-body">
                         <div className="body-header d-flex justify-content-between">
-                            <h5 className="card-title">{post.pais}</h5>
+                            <h5 className="card-title">{post.country}</h5>
                             <div className="btn-like-comment">
                                 <i className="fa-solid fa-comment"></i>
                                 <i className="fa-solid fa-heart ms-1"></i>
                             </div>
                         </div>
                         
-                        <p className="card-text text-start">{post.text}</p>
+                        <p className="card-text text-start">{post.description}</p>
                     </div>
                 </div>
             </div>

@@ -34,6 +34,7 @@ def add_post():
     description = data.get('description')
     country = data.get('country')
     image = data.get('image')
+    
     user_id = data.get('user_id')
 
     if not title or not description or not country or not image or not user_id:
