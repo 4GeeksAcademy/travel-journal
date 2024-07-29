@@ -107,61 +107,70 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
 			loginUser : async (formData) => {
-                const response = await fetch(`${process.env.BACKEND_URL}/api/login`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(formData),
-                });
-                if(!response.ok) throw Error("Error en el Login")
-                if(response.status === 401){
-                     throw("Credenciales inválidas")
-                }
-                else if(response.status === 400){
-                     throw ("Contraseña incorrecta")
-                }
-                const data = await response.json()
-                localStorage.setItem("jwt-token", data.token);
-                return data
-           },
-         getMyTasks : async () => {
-            // Recupera el token desde la localStorage
-            const token = localStorage.getItem('jwt-token');
-            const resp = await fetch(`https://automatic-system-rq66vjwx5w635v45-3001.app.github.dev/api/protected`, {
-               method: 'GET',
-               headers: {
-                 "Content-Type": "application/json",
-                 'Authorization': 'Bearer ' + token // authorization token
-               }
-            });
-            if(!resp.ok) {
-                 throw Error("There was a problem in the login request")
-            } else if(resp.status === 403) {
-                 throw Error("Missing or invalid token");
-            } else {
-                throw Error("Unknown error");
-            }
-       },
-       registerUser : async (formData) => {
-        try {
-            const response = await fetch(`${process.env.BACKEND_URL}/api/register`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData),
-            });
-            if (response.ok) {
-                return { success: true };
-            } else {
-                const errorData = await response.json();
-                return { success: false, message: errorData.message };
-            }
-        } catch (error) {
-            return { success: false, message: "Error en la solicitud" };
-        }
-    },
+				const response = await fetch(`${process.env.BACKEND_URL}/api/login`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(formData),
+				});
+		   
+				if(!response.ok) throw Error("Error en el Login")
+		   
+				if(response.status === 401){
+					 throw("Credenciales inválidas")
+				}
+				else if(response.status === 400){
+					 throw ("Contraseña incorrecta")
+				}
+				const data = await response.json()
+				localStorage.setItem("jwt-token", data.token);
+		   
+				return data
+		   },
+
+			getMyTasks : async () => {
+				// Recupera el token desde la localStorage
+				const token = localStorage.getItem('jwt-token');
+		
+				const resp = await fetch(`https://automatic-system-rq66vjwx5w635v45-3001.app.github.dev/api/protected`, {
+				method: 'GET',
+				headers: { 
+					"Content-Type": "application/json",
+					'Authorization': 'Bearer ' + token // authorization token
+				} 
+				});
+		
+				if(!resp.ok) {
+					throw Error("There was a problem in the login request")
+				} else if(resp.status === 403) {
+					throw Error("Missing or invalid token");
+				} else {
+					throw Error("Unknown error");
+				}
+		},
+
+	   registerUser : async (formData) => {
+		try {
+			const response = await fetch(`${process.env.BACKEND_URL}/api/register`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(formData),
+			});
+	
+			if (response.ok) {
+				return { success: true };
+			} else {
+				const errorData = await response.json();
+				return { success: false, message: errorData.message };
+			}
+		} catch (error) {
+			return { success: false, message: "Error en la solicitud" };
+		}
+	},
+	
         }
     };
 };

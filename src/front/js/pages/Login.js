@@ -74,17 +74,19 @@ export const Login = () => {
             }
         }
     };
-    
 
     const handleSubmitLogin = async (e) => {
         e.preventDefault();
         const { username, password } = formData;
+
         if (!formData.username) {
-            setErrors({ general: "El usuario es requerido." });
+            setErrors({ general: "El usuario es requerido." });				   
         }
+
         if (!formData.password) {
-            setErrors({ general: "La contraseña es requerida." });
+            setErrors({ general: "La contraseña es requerida." });				   
         }
+    
         try {
             const response = await fetch('https://automatic-system-rq66vjwx5w635v45-3001.app.github.dev/api/login', {
                 method: 'POST',
@@ -93,7 +95,9 @@ export const Login = () => {
                 },
                 body: JSON.stringify({ username, password }),
             });
+    
             const result = await response.json();
+    
             if (response.ok && result.access_token) {
                 navigate('/');
             } else {
