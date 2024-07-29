@@ -132,45 +132,7 @@ def dashboard():
     except Exception as e:
         return jsonify({'message': str(e)}), 500
 
-@api.route('/getPosts', methods=['GET'])
-def get_posts():
-    try:
-        posts = Post.query.all()
-        posts = [post.serialize() for post in posts]
-        return jsonify(posts), 200
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
 
-@api.route('/addPost', methods=['POST'])
-@jwt_required()
-def add_post():
-    data = request.get_json()
-    title = data.get('title')
-    description = data.get('description')
-    country = data.get('country')
-    image = data.get('image')
-    user_id = get_jwt_identity()
-
-    if not title or not description or not country or not image or not user_id:
-        return jsonify({'message': 'All data are required'}), 400
-    
-    try:
-        user = User.query.get(user_id)
-        if not user:
-            return jsonify({'message': 'User not found'}), 404
-
-        new_post = Post(
-            title=title,
-            description=description,
-            country=country,
-            image=image,
-            user_id=user_id
-        )
-        db.session.add(new_post)
-        db.session.commit()
-        return jsonify({'message': 'Post created successfully', 'post': new_post.serialize()}), 201
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
 
 if __name__ == '__main__':
     api.run(debug=True)
