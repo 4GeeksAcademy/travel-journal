@@ -142,51 +142,49 @@ const getState = ({ getStore, getActions, setStore }) => {
                 setStore({ demo: demo });
             },
 
-			loginUser : async (username, password) => {
-				const resp = await fetch(`https://automatic-system-rq66vjwx5w635v45-3001.app.github.dev/api/login`, { 
-					 method: "POST",
-					 headers: { "Content-Type": "application/json" },
-					 body: JSON.stringify({ username, password }) 
-				})
+			loginUser : async (formData) => {
+				const response = await fetch(`${process.env.BACKEND_URL}/api/login`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(formData),
+				});
 		   
-				if(!resp.ok) throw Error("There was a problem in the login request")
+				if(!response.ok) throw Error("Error en el Login")
 		   
-				if(resp.status === 401){
-					 throw("Invalid credentials")
+				if(response.status === 401){
+					 throw("Credenciales inválidas")
 				}
-				else if(resp.status === 400){
-					 throw ("Invalid email or password format")
+				else if(response.status === 400){
+					 throw ("Contraseña incorrecta")
 				}
-				const data = await resp.json()
+				const data = await response.json()
 				localStorage.setItem("jwt-token", data.token);
 		   
 				return data
 		   },
 
-		 getMyTasks : async () => {
-			// Recupera el token desde la localStorage
-			const token = localStorage.getItem('jwt-token');
-	   
-			const resp = await fetch(`https://automatic-system-rq66vjwx5w635v45-3001.app.github.dev/api/protected`, {
-			   method: 'GET',
-			   headers: { 
-				 "Content-Type": "application/json",
-				 'Authorization': 'Bearer ' + token // ⬅⬅⬅ authorization token
-			   } 
-			});
-	   
-			if(!resp.ok) {
-				 throw Error("There was a problem in the login request")
-			} else if(resp.status === 403) {
-				 throw Error("Missing or invalid token");
-			} else {
-				throw Error("Unknown error");
-			}
-	   
-			const data = await resp.json();
-			console.log("This is the data you requested", data);
-			return data
-	   },
+			getMyTasks : async () => {
+				// Recupera el token desde la localStorage
+				const token = localStorage.getItem('jwt-token');
+		
+				const resp = await fetch(`https://automatic-system-rq66vjwx5w635v45-3001.app.github.dev/api/protected`, {
+				method: 'GET',
+				headers: { 
+					"Content-Type": "application/json",
+					'Authorization': 'Bearer ' + token // authorization token
+				} 
+				});
+		
+				if(!resp.ok) {
+					throw Error("There was a problem in the login request")
+				} else if(resp.status === 403) {
+					throw Error("Missing or invalid token");
+				} else {
+					throw Error("Unknown error");
+				}
+		},
 
 	   registerUser : async (formData) => {
 		try {
