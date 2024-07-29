@@ -78,16 +78,31 @@ export const Login = () => {
 
     const handleSubmitLogin = async (e) => {
         e.preventDefault();
-        const success = await actions.loginUser({ username: formData.username, password: formData.password });
-        if (success) {
-            setErrors({});
-            console.log("Login exitoso");
-            navigate('/');
-        } else {
-            setErrors({ general: "Credenciales inválidas" });
+        const { username, password } = formData;
+        if (!formData.username) {
+            setErrors({ general: "El usuario es requerido." });
+        }
+        if (!formData.password) {
+            setErrors({ general: "La contraseña es requerida." });
+        }
+        try {
+            const response = await fetch('https://automatic-system-rq66vjwx5w635v45-3001.app.github.dev/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            });
+            const result = await response.json();
+            if (response.ok && result.access_token) {
+                navigate('/');
+            } else {
+                setErrors({ general: result.message || "Error en el login." });
+            }
+        } catch (error) {
+            setErrors({ general: "Error en el login: " + error.message });
         }
     };
-
     return (
         <div className="container mt-5">
             <div className="container d-flex justify-content-center">

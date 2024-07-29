@@ -40,6 +40,7 @@ const AddPostForm = () => {
                 <input type="text" value={country} class="form-control" onChange={(e) => setCountry(e.target.value)} required />                
             </div>
             
+            
                         
             <button type="submit" class="btn btn-primary">Add Post</button>
         </form>

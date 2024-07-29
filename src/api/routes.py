@@ -14,7 +14,9 @@ api = Blueprint('api', __name__)
 CORS(api)
 CORS(api, resources={r"/*": {"origins": "https://automatic-system-rq66vjwx5w635v45-3000.app.github.dev"}})
 
-#GET POSTS
+
+
+#GET ALL POSTS
 @api.route('/getPosts', methods=['GET'])
 def get_posts():
     try:
@@ -34,8 +36,7 @@ def add_post():
     description = data.get('description')
     country = data.get('country')
     image = data.get('image')
-
-    user_id = get_jwt_identity()
+    user_id = data.get('user_id')
 
     if not title or not description or not country or not image or not user_id:
         return jsonify({'message': 'All data are required'}), 400
@@ -56,7 +57,6 @@ def add_post():
         return jsonify({'message': 'Post created successfully', 'post': new_post.serialize()}), 201
     except Exception as e:
         return jsonify({'message': str(e)}), 500
-
 #addpost
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
@@ -102,30 +102,20 @@ def register():
 @api.route('/login', methods=['POST'])
 def login():
     try:
-        data = request.json
+        data = request.get_json()
         username = data.get('username')
         password = data.get('password')
-
-        print(f"Username: {username}, Password: {password}")
-
         if not username or not password:
             return jsonify({"message": "Usuario y contraseña son requeridos"}), 400
-
-        # Consulta correcta con valores de cadena
-        user = User.query.filter_by(username=username, password=password).first()
-        
+        user = User.query.filter_by(username=username).first()
         if user:
-            return jsonify({"message": "Login exitoso"}), 200
+            access_token = create_access_token(identity=user.id)
+            return jsonify(access_token=access_token, message="Login exitoso"), 200
         else:
             return jsonify({"message": "Credenciales inválidas"}), 401
-
     except SQLAlchemyError as e:
-        # Registrar el error y devolver una respuesta general
-        print(f"SQLAlchemyError: {e}")
         return jsonify({"message": "Error al procesar la solicitud"}), 500
     except Exception as e:
-        # Manejar cualquier otra excepción
-        print(f"Exception: {e}")
         return jsonify({"message": "Error inesperado"}), 500
 
 @api.route("/protected", methods=["GET"])
