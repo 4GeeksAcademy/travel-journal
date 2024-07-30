@@ -1,19 +1,7 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			message: null,
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			],
+			message: null,			
 			countries:[],
 			selectedCountry: '',
 			posts:[],
@@ -55,14 +43,17 @@ const getState = ({ getStore, getActions, setStore }) => {
                 setStore({ filteredPosts });
             },
 			//add a post
-			addAPost: async(title, description, country, image, user_id) =>{
+			addAPost: async(title, description, country, image) =>{
+				const store = getStore();
 				try {
 					const response = await fetch(process.env.BACKEND_URL + `/api/addPost`, {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
+							"Authorization": `Bearer ${store.token}`
 						},
-						body: JSON.stringify({title, description, country, image, user_id})
+						body: JSON.stringify({title, description, country, image, user_id: 1})
+						// he puesto user_id 1 para que funcione de momento, debera ser el id del usuario logado
 					});
 					if (!response.ok) {
 						const errorData = await response.json();
@@ -70,22 +61,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 
 					const newPost = await response.json();
-					const store = getStore();
-					setStore({postExample: [...store.postExample, newPost.post]});
-					return {success: true, post: newPost.post};
+					setStore({ posts: [...store.posts, newPost.post] });
+					return { success: true, post: newPost.post };
 					
 				} catch (error) {
 					console.error("Error adding post:", error);
 					return { success: false, message: error.message };					
 				}
 			},
-
 			//add a post
 			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
-			},
-
+			
             getMessage: async () => {
                 try {
                     const resp = await fetch(process.env.BACKEND_URL + "/api/hello");
@@ -97,14 +83,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            changeColor: (index, color) => {
-                const store = getStore();
-                const demo = store.demo.map((elm, i) => {
-                    if (i === index) elm.background = color;
-                    return elm;
-                });
-                setStore({ demo: demo });
-            },
+            
 
 			loginUser : async (formData) => {
 				const response = await fetch(`${process.env.BACKEND_URL}/api/login`, {

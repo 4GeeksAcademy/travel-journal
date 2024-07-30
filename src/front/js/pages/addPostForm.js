@@ -1,14 +1,18 @@
-import React, {useState} from "react";
-import { useContext } from "react";
+import React, {useState, useContext, useEffect} from "react";
 import { Context } from "../store/appContext";
 
 const AddPostForm = () => {
-    const {actions} = useContext(Context);
+    const { store, actions} = useContext(Context);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [country, setCountry] = useState("");
     const [image, setImage] = useState("");
-    const [user_id, setUserId] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
+
+    useEffect(() => {
+        actions.getCountries();
+    }, []);
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -19,6 +23,17 @@ const AddPostForm = () => {
             alert("Error creating post: " + result.message);
         }
     };
+
+    const handleCountryChange = (e) => {
+        setCountry(e.target.value);
+    };
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value)
+    };
+    const filteredCountries = store.countries.filter((country) =>
+        country.name.common.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return(
         <div className="m-5">
@@ -35,13 +50,32 @@ const AddPostForm = () => {
                 <label for="imageUrl" class="form-label">Image url</label>
                 <input type="text" value={image} class="form-control" onChange={(e) => setImage(e.target.value)} required />                
             </div>
-            <div className="mb-3">
-                <label for="country" class="form-label">Country</label>
-                <input type="text" value={country} class="form-control" onChange={(e) => setCountry(e.target.value)} required />                
-            </div>
-            
-            
-                        
+            <div className="mb-3 d-flex justify-content-center">
+            <label htmlFor="country" className="form-label"></label>
+                    <div className="dropdown">
+                        <button className="btn btn-form dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            {country || 'Select a country'}
+                        </button>
+                        <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Search..."
+                                    value={searchTerm}
+                                    onChange={handleSearchChange}
+                                />
+                            </li>
+                            {filteredCountries.map((country, index) => (
+                                <li key={index}>
+                                    <a className="dropdown-item" href="#" onClick={() => handleCountryChange({ target: { value: country.name.common } })}>
+                                        {country.name.common}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
             <button type="submit" class="btn btn-primary">Add Post</button>
         </form>
         </div>
