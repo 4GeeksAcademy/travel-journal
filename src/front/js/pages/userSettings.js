@@ -74,16 +74,16 @@ const UserSettings = () => {
             <img src={imageUrl} alt="Vista previa" className="profile-image" />
           ) : (
             <div className="bg-light d-flex align-items-center justify-content-center placeholder-image">
-              Imagen de Perfil
+              Profile Picture
             </div>
           )}
           <button type="button" onClick={handleImageInsert} className="btn btn-secondary insert-image-label">
-            Insertar imagen
+          Insert image
           </button>
         </div>
         <div className="mb-3 w-50 text-center">
           <label htmlFor="username" className="form-label">
-            Modificar nombre de usuario
+          Modify username
           </label>
           <input
             type="text"
@@ -97,7 +97,7 @@ const UserSettings = () => {
         </div>
         <div className="w-100 d-flex justify-content-end mt-4">
           <button type="submit" className="btn btn-form">
-            Aceptar
+          Accept
           </button>
         </div>
       </form>
