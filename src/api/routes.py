@@ -1,8 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, jwt_required,unset_jwt_cookies
 from api.models import db, User, Post
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
-from api.models import db, User, Post
 from sqlalchemy.exc import SQLAlchemyError
 from flask_cors import CORS
 
@@ -92,19 +90,12 @@ def register():
 def login():
     try:
         data = request.get_json()
-        data = request.get_json()
         username = data.get('username')
         password = data.get('password')
-
         if not username or not password:
             return jsonify({"message": "Usuario y contraseña son requeridos"}), 400
         user = User.query.filter_by(username=username).first()
-
-        user = User.query.filter_by(username=username).first()
-        
         if user:
-            access_token = create_access_token(identity=user.id)
-            return jsonify(access_token=access_token, message="Login exitoso"), 200
             access_token = create_access_token(identity=user.id)
             return jsonify(access_token=access_token, message="Login exitoso"), 200
         else:

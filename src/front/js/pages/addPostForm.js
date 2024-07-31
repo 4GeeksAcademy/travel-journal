@@ -53,7 +53,7 @@ const AddPostForm = () => {
             <div className="mb-3 d-flex justify-content-center">
             <label htmlFor="country" className="form-label"></label>
                     <div className="dropdown">
-                        <button className="btn btn-form dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button className="btn btn-form  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                             {country || 'Select a country'}
                         </button>
                         <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -76,7 +76,7 @@ const AddPostForm = () => {
                         </ul>
                     </div>
                 </div>
-            <button type="submit" class="btn btn-primary">Add Post</button>
+            <button type="submit" className="btn btn-form">Add Post</button>
         </form>
         </div>
     )
