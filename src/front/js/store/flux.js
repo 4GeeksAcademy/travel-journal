@@ -5,7 +5,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			countries:[],
 			selectedCountry: '',
 			posts:[],
-			filteredPosts:[],			
+			filteredPosts:[],				
 
 		},
 		actions: {
