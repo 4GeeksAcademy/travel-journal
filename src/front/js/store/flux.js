@@ -160,8 +160,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					 throw ("Contraseña incorrecta")
 				}
 				const data = await response.json()
-				localStorage.setItem("jwt-token", data.token);
-		   
+				localStorage.setItem("jwt-token", data.access_token);
+				localStorage.setItem("user",JSON.stringify(data.user))
 				return data
 		   },
 
