@@ -70,6 +70,7 @@ def register():
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
+    password = User.generate_hash_password(password)
 
     if not username or not email or not password:
         return jsonify({'message': 'Todos los campos son requeridos'}), 400
@@ -81,6 +82,7 @@ def register():
         return jsonify({'message': 'El email ya está registrado'}), 400
 
     new_user = User(username=username, email=email, password=password)
+
     db.session.add(new_user)
     db.session.commit()
 
@@ -95,9 +97,12 @@ def login():
         if not username or not password:
             return jsonify({"message": "Usuario y contraseña son requeridos"}), 400
         user = User.query.filter_by(username=username).first()
+        if not user.verificated_password(password):
+            return jsonify({"message": "Credenciales inválidas"}), 401
+
         if user:
             access_token = create_access_token(identity=user.id)
-            return jsonify(access_token=access_token, message="Login exitoso"), 200
+            return jsonify(access_token=access_token, message="Login exitoso",user=user.serialize()), 200
         else:
             return jsonify({"message": "Credenciales inválidas"}), 401
     except SQLAlchemyError as e:
