@@ -74,7 +74,6 @@ export const Login = () => {
             }
         }
     };
-    
 
     const handleSubmitLogin = async (e) => {
         e.preventDefault();
