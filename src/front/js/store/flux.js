@@ -1,11 +1,13 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			message: null,			
-			countries:[],
-			selectedCountry: '',
-			posts:[],
-			filteredPosts:[],				
+			user: JSON.parse(localStorage.getItem('user')), // Cargar el usuario logado
+            token: localStorage.getItem('jwt-token'), // Cargar el token desde localStorage
+            message: null,
+            countries: [],
+            selectedCountry: '',
+            posts: [],
+            filteredPosts: []			
 
 		},
 		actions: {
@@ -24,8 +26,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					const response = await fetch("https://restcountries.com/v3.1/all");
 					const data = await response.json();
-					setStore({ countries: data });
-					console.log(data);					
+					setStore({ countries: data });										
 				} catch (error) {
 					console.error("Error fetching countries:", error);
 					
@@ -44,7 +45,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 			//add a post
 			addAPost: async(title, description, country, image) =>{
-				const store = getStore();
+				const store = getStore();				
 				try {
 					const response = await fetch(process.env.BACKEND_URL + `/api/addPost`, {
 						method: "POST",
@@ -52,8 +53,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							"Content-Type": "application/json",
 							"Authorization": `Bearer ${store.token}`
 						},
-						body: JSON.stringify({title, description, country, image, user_id: 1})
-						// he puesto user_id 1 para que funcione de momento, debera ser el id del usuario logado
+						body: JSON.stringify({title, description, country, image, user_id: store.user.id})						
 					});
 					if (!response.ok) {
 						const errorData = await response.json();
@@ -104,7 +104,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 				const data = await response.json()
 				localStorage.setItem("jwt-token", data.access_token);
-				localStorage.setItem("user",JSON.stringify(data.user))
+				localStorage.setItem("user",JSON.stringify(data.user));
+				setStore({ user: data.user }); // linea añadida por edu
 				return data
 		   },
 
