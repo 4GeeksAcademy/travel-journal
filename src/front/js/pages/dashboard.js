@@ -7,6 +7,7 @@ export const Dashboard = () => {
     const { store, actions } = useContext(Context);
     const [userPosts, setUserPosts] = useState([]);
     
+    
     useEffect(() => {
         const fetchUserPosts = async () => {
             try {
@@ -32,6 +33,50 @@ export const Dashboard = () => {
 
         fetchUserPosts();
     }, []);
+
+    const handleDelete = async (postId) => {
+        try {
+            const token = localStorage.getItem('jwt-token');
+            const response = await fetch(`${process.env.BACKEND_URL}/api/deletePost/${postId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+    
+            if (response.ok) {
+                setUserPosts(userPosts.filter(post => post.id !== postId));
+            } else {
+                console.error("Failed to delete post");
+            }
+        } catch (error) {
+            console.error("Error deleting post:", error);
+        }
+    };
+
+    const handleEdit = async (postId, updatedPost) => {
+        try {
+            const token = localStorage.getItem('jwt-token');
+            const response = await fetch(`${process.env.BACKEND_URL}/api/editPost/${postId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(updatedPost)
+            });
+    
+            if (response.ok) {
+                const updatedPostData = await response.json();
+                setUserPosts(userPosts.map(post => post.id === postId ? updatedPostData.post : post));
+            } else {
+                console.error("Failed to update post");
+            }
+        } catch (error) {
+            console.error("Error updating post:", error);
+        }
+    };
 
     return (
         <div className="container-fluid mt-5 h-100">

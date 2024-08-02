@@ -35,7 +35,7 @@ export const Post = () => {
                     <img src={post.image} className="card-img-top img-post" alt="..." />
                     <div className="card-body">
                         <div className="body-header d-flex justify-content-between">
-                            <h5 className="card-title">{post.country}</h5>
+                            <h5 className="card-title">{post.title}</h5>
                             <div className="btn-like-comment">
                                 <i className="fa-solid fa-comment"></i>
                                 <i className="fa-solid fa-heart ms-1"></i>

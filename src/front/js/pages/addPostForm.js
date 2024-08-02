@@ -46,15 +46,15 @@ const AddPostForm = () => {
         <form onSubmit={handleSubmit}>
             <div className="mb-3">
                 <label htmlFor="title" className="form-label">Title</label>
-                <input type="text" value={title} class="form-control" onChange={(e) => setTitle(e.target.value)} required />                
+                <input type="text" value={title} className="form-control" onChange={(e) => setTitle(e.target.value)} required />                
             </div>
             <div className="mb-3">
-                <label htmlFor="description" class="form-label">description</label>
-                <input type="text" value={description} class="form-control" onChange={(e) => setDescription(e.target.value)} required />                
+                <label htmlFor="description" className="form-label">description</label>
+                <input type="text" value={description} className="form-control" onChange={(e) => setDescription(e.target.value)} required />                
             </div>
             <div className="mb-3">
-                <label htmlFor="imageUrl" class="form-label">Image url</label>
-                <input type="text" value={image} class="form-control" onChange={(e) => setImage(e.target.value)} required />                
+                <label htmlFor="imageUrl" className="form-label">Image url</label>
+                <input type="text" value={image} className="form-control" onChange={(e) => setImage(e.target.value)} required />                
             </div>
             <div className="mb-3 d-flex justify-content-center">
             <label htmlFor="country" className="form-label"></label>

@@ -7,7 +7,57 @@ from flask_cors import CORS
 api = Blueprint('api', __name__)
 CORS(api)
 
+#edit a post
+@api.route('/editPost/<int:post_id>', methods=['PUT'])
+@jwt_required()
+def edit_post(post_id):
+    try:
+        current_user_id = get_jwt_identity()
+        data = request.get_json()
+        title = data.get('title')
+        description = data.get('description')
+        image = data.get('image')
 
+        post = Post.query.get(post_id)
+        
+        if not post:
+            return jsonify({'message': 'Post not found'}), 404
+        
+        if post.user_id != current_user_id:
+            return jsonify({'message': 'Unauthorized'}), 403
+        
+        if title:
+            post.title = title
+        if description:
+            post.description = description
+        if image:
+            post.image = image
+        
+        db.session.commit()
+        
+        return jsonify({'message': 'Post updated successfully', 'post': post.serialize()}), 200
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+    #edit a post
+#delete a post
+@api.route('/deletePost/<int:post_id>', methods=['DELETE'])
+@jwt_required()
+def delete_post(post_id):
+    try:
+        current_user_id = get_jwt_identity()
+        post = post.query.get(post_id)
+        if not post:
+            return jsonify({'message': 'Post not found'}), 404
+        if post.user_id != current_user_id:
+            return jsonify({'message': 'Unauthorized'}), 403
+        
+        db.session.delete(post)
+        db.session.commit()
+
+        return jsonify({'message':'Post deleted successfully'}), 200
+    except Exception as e:
+        return jsonify({'message':str(e)}), 500
+#delete a post
 #GET ALL POSTS
 @api.route('/getPosts', methods=['GET'])
 def get_posts():
