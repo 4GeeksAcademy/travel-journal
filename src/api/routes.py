@@ -1,8 +1,12 @@
-from flask import Blueprint, request, jsonify
+from datetime import timedelta
+from email.message import Message
+from flask import Blueprint, current_app, request, jsonify
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from api.models import db, User, Post
 from sqlalchemy.exc import SQLAlchemyError
 from flask_cors import CORS
+from flask_mail import Message
+from api.mail_extension import mail
 
 api = Blueprint('api', __name__)
 CORS(api)
@@ -65,6 +69,31 @@ def login():
         return jsonify({"message": "Error al procesar la solicitud"}), 500
     except Exception as e:
         return jsonify({"message": "Error inesperado"}), 500
+    
+@api.route('/forgot-password', methods=['POST'])
+def forgot_password():
+    data = request.get_json() 
+    email = data.get('email')  
+    user = User.query.filter_by(email = email).first()
+
+    if not user:
+        return jsonify('Unregistered email')
+    token = create_access_token(identity=user.id, expires_delta=timedelta(minutes=5))
+    string_template_html = f"""
+        <html>
+            <body>
+                <p>Click on the following <a href="https://automatic-system-rq66vjwx5w635v45-3001.app.github.dev/{token}" className="link-tx">link</a> to recover your password</p>
+            </body>
+        </html>
+    """
+    msg = Message(
+        'Restablecer contraseña',
+        sender='noreply@example.com',
+        recipients=[user.email],
+        html=string_template_html
+    )
+    mail.send(msg)
+    return jsonify({'msg':'Email sent succesfully!'})
 
 @api.route("/protected", methods=["GET"])
 @jwt_required()

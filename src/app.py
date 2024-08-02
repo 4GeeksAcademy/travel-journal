@@ -12,11 +12,23 @@ from api.admin import setup_admin
 from api.commands import setup_commands
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
+from flask_mail import Message
+from api.mail_extension import mail
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../public/')
 app = Flask(__name__)
 app.url_map.strict_slashes = False
+app.config['MAIL_SERVER'] = 'angelikawebdev@gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = 'angelikawebdev@gmail.com'
+app.config['MAIL_PASSWORD'] = 'qclh mlzi ydcz sfyf'
+app.config['MAIL_DEFAULT_SENDER'] = 'your_email@example.com'
+
+# Inicializa Flask-Mail con la aplicación
+mail.init_app(app)
 
 # Database configuration
 db_url = os.getenv("DATABASE_URL")
@@ -27,6 +39,7 @@ else:
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["JWT_SECRET_KEY"] = "super-secret"
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 3600
 
 # Initialize extensions
 MIGRATE = Migrate(app, db, compare_type=True)
@@ -40,7 +53,6 @@ setup_commands(app)
 
 # Add all endpoints form the API with a "api" prefix
 app.register_blueprint(api, url_prefix='/api')
-
 # Handle/serialize errors like a JSON object
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):

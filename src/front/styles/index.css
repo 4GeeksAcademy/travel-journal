@@ -93,3 +93,9 @@ a {
     text-align: center;
 }
 
+.link-tx {
+    text-decoration: none;
+    color: #9F353B;
+    font-weight: bold;
+}
+
