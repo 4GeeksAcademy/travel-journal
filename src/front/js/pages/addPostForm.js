@@ -1,4 +1,5 @@
 import React, {useState, useContext, useEffect} from "react";
+import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 
 const AddPostForm = () => {
@@ -8,6 +9,7 @@ const AddPostForm = () => {
     const [country, setCountry] = useState("");
     const [image, setImage] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
         actions.getCountries();
@@ -19,9 +21,13 @@ const AddPostForm = () => {
         const result = await actions.addAPost(title,description,country,image)
         if (result.success) {
             alert("Post created successfully!");
+            navigate("/dashboard");
         } else {
             alert("Error creating post: " + result.message);
         }
+    };
+    const handleCancel = () => {
+        navigate("/dashboard");
     };
 
     const handleCountryChange = (e) => {
@@ -39,15 +45,15 @@ const AddPostForm = () => {
         <div className="m-5">
         <form onSubmit={handleSubmit}>
             <div className="mb-3">
-                <label for="title" class="form-label">Title</label>
+                <label htmlFor="title" className="form-label">Title</label>
                 <input type="text" value={title} class="form-control" onChange={(e) => setTitle(e.target.value)} required />                
             </div>
             <div className="mb-3">
-                <label for="description" class="form-label">description</label>
+                <label htmlFor="description" class="form-label">description</label>
                 <input type="text" value={description} class="form-control" onChange={(e) => setDescription(e.target.value)} required />                
             </div>
             <div className="mb-3">
-                <label for="imageUrl" class="form-label">Image url</label>
+                <label htmlFor="imageUrl" class="form-label">Image url</label>
                 <input type="text" value={image} class="form-control" onChange={(e) => setImage(e.target.value)} required />                
             </div>
             <div className="mb-3 d-flex justify-content-center">
@@ -76,7 +82,10 @@ const AddPostForm = () => {
                         </ul>
                     </div>
                 </div>
-            <button type="submit" className="btn btn-form">Add Post</button>
+                <div className="d-flex">
+                    <button type="submit" className=" m-3 btn btn-form">Add Post</button>
+                    <button type="button" className=" m-3 btn btn-form" onClick={handleCancel}>Cancel</button>
+                </div>
         </form>
         </div>
     )

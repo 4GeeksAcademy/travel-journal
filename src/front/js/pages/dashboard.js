@@ -40,7 +40,7 @@ export const Dashboard = () => {
                     <i className="fa-solid fa-arrow-left"></i>
                 </Link>
             </div>
-            <div className="d-flex justify-content-center">
+            <div className="container-fluid d-flex justify-content-center">
                 <Link to="/addAPost">
                     <button className="btn btn-form m-3">Add a new Post</button>
                 </Link>
@@ -54,7 +54,7 @@ export const Dashboard = () => {
                             <div className="card mb-3" style={{ width: "50rem" }} key={post.id}>
                                 <div className="card-head p-3 d-flex align-items-center">
                                     <img className="img-user me-3" src={post.author.image} alt="" />
-                                    <span className="name-user">{post.author.username}</span>
+                                    <span className="name-user">{post.author}</span>
                                     <div className="dashboard-icons">
                                         <i className="fa-solid fa-trash fa-lg text-danger m-1"></i>
                                         <i className="fa-regular fa-pen-to-square fa-lg ms-1 text-warning"></i>
