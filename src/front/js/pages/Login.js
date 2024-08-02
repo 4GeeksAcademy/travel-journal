@@ -77,14 +77,35 @@ export const Login = () => {
 
     const handleSubmitLogin = async (e) => {
         e.preventDefault();
-        const success = await actions.loginUser({ username: formData.username, password: formData.password });
-        if (success) {
-            setErrors({});
-            console.log("Login exitoso");
-            navigate('/');
-        } else {
-            setErrors({ general: "Credenciales inválidas" });
+        const { username, password } = formData;
+
+        let validationErrors = {};
+
+        if (!username) {
+            validationErrors.username = "El usuario es requerido.";
         }
+
+        if (!password) {
+            validationErrors.password = "La contraseña es requerida.";
+        }
+
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+
+        try {
+            const data = await actions.loginUser({ username, password });
+
+            if (data.access_token) {
+                setErrors({});
+                navigate('/');
+            } else {
+                setErrors({ general: "Error en el login." });
+            }
+        } catch (error) {
+            setErrors({ general: "Error en el login: " + error.message });
+        }    
     };
 
     return (
@@ -104,7 +125,7 @@ export const Login = () => {
                             aria-selected={showRegistro}
                             onClick={handleShowRegistro}
                         >
-                            <span>Registro</span>
+                            <span>Sign in</span>
                         </button>
                     </li>
                     <li className="nav-item">
@@ -168,7 +189,7 @@ export const Login = () => {
                             </div>
                             <div className="mb-3 form-check d-flex justify-content-end align-items-center">
                                 <input type="checkbox" className="form-check-input me-3" id="exampleCheck1" required />
-                                <label className="form-check-label text-start" htmlFor="exampleCheck1">Aceptar política de privacidad</label>
+                                <label className="form-check-label text-start" htmlFor="exampleCheck1">I accept the Privacy Policy</label>
                             </div>
                             {errors.general && (
                             <div id="emailHelp" className="form-text text-danger">
@@ -176,7 +197,7 @@ export const Login = () => {
                             </div>
                         )}
                             <div className="container container-btn d-flex justify-content-end">
-                                <button type="submit" className="btn btn-form">Enviar</button>
+                                <button type="submit" className="btn btn-form">Send</button>
                             </div>
                         </form>
                     </div>
@@ -213,7 +234,7 @@ export const Login = () => {
                             </div>
                             {errors.general && <div className="form-text text-danger text-start">{errors.general}</div>}
                             <div className="container container-btn d-flex justify-content-end">
-                                <button type="submit" className="btn btn-form">Enviar</button>
+                                <button type="submit" className="btn btn-form">Send</button>
                             </div>
                         </form>
                     </div>
