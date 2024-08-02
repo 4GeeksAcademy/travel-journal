@@ -1,8 +1,18 @@
 const getState = ({ getStore, getActions, setStore }) => {
+	let user = null;
+    try {
+        const userFromStorage = localStorage.getItem('user');
+        if (userFromStorage) {
+            user = JSON.parse(userFromStorage);
+        }
+    } catch (error) {
+        console.error("Error parsing user from localStorage", error);
+        localStorage.removeItem('user'); 
+    }
 	return {
 		store: {
-			user: JSON.parse(localStorage.getItem('user')), // Cargar el usuario logado
-            token: localStorage.getItem('jwt-token'), // Cargar el token desde localStorage
+			user: user, 
+            token: localStorage.getItem('jwt-token'),
             message: null,
             countries: [],
             selectedCountry: '',
