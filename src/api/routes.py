@@ -95,6 +95,17 @@ def forgot_password():
     mail.send(msg)
     return jsonify({'msg':'Email sent succesfully!'})
 
+@api.route("/reset-password", methods=['POST'])
+@jwt_required()
+def reset_password():
+    user_id = get_jwt_identity()
+    new_password = request.json.get('password')
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"msg":"User not found"})
+    user.password = new_password
+    db.session.commit()
+
 @api.route("/protected", methods=["GET"])
 @jwt_required()
 def protected():
