@@ -107,8 +107,9 @@ def reset_password():
     user = User.query.get(user_id)
     if not user:
         return jsonify({"msg":"User not found"})
-    user.password = new_password
+    user.password = user.generate_hash_password(new_password)
     db.session.commit()
+    return jsonify({"msg":"Password changed successfully"})
 
 @api.route("/protected", methods=["GET"])
 @jwt_required()
