@@ -11,6 +11,7 @@ import { Footer } from "./component/footer";
 import { Login } from "./pages/Login";
 import { Post } from "./pages/Post";
 import { Dashboard } from "./pages/dashboard";
+import EditPostForm from "./pages/editPostForm";
 
 //create your first component
 const Layout = () => {
@@ -32,6 +33,7 @@ const Layout = () => {
                     <Route element={<Demo />} path="/demo" />
                     <Route element={<Dashboard />} path="/dashboard" />
                     <Route element={<AddPostForm />} path="/AddAPost" />
+                    <Route element={<EditPostForm />} path="/editPost/:postId" />
                     <Route element={<Single />} path="/single/:theid" />
                     <Route element={<h1>Not found!</h1>} />
                 </Routes>

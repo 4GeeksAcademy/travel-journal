@@ -21,6 +21,30 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 		},
 		actions: {
+			editPost: async (postId, updatedPost) => {
+                try {
+                    const token = localStorage.getItem('jwt-token');
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/editPost/${postId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(updatedPost)
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        return { success: true, post: data.post };
+                    } else {
+                        const errorData = await response.json();
+                        return { success: false, message: errorData.message };
+                    }
+                } catch (error) {
+                    console.error("Error editing post:", error);
+                    return { success: false, message: "Error editing post" };
+                }
+            },
 			getPosts: async () => {
 				try {
 					const response = await fetch(process.env.BACKEND_URL + `/api/getPosts`);

@@ -29,7 +29,7 @@ export const Post = () => {
             <div className="container-fluid d-flex justify-content-center">
                 <div className="card" style={{ width: "50rem" }}>
                     <div className="card-head p-3 d-flex align-items-center">
-                        <img className="img-user me-3" src="https://www.dzoom.org.es/wp-content/uploads/2020/02/portada-foto-perfil-redes-sociales-consejos-810x540.jpg" alt="" />
+                        <img className="img-user me-3" src={post.author_image} alt="" />
                         <span className="name-user">{post.author}</span>
                     </div>
                     <img src={post.image} className="card-img-top img-post" alt="..." />

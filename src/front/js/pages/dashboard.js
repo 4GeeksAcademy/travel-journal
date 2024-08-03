@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 
 
 export const Dashboard = () => {
     const { store, actions } = useContext(Context);
     const [userPosts, setUserPosts] = useState([]);
+    const navigate = useNavigate();
     
     
     useEffect(() => {
@@ -55,27 +56,8 @@ export const Dashboard = () => {
         }
     };
 
-    const handleEdit = async (postId, updatedPost) => {
-        try {
-            const token = localStorage.getItem('jwt-token');
-            const response = await fetch(`${process.env.BACKEND_URL}/api/editPost/${postId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(updatedPost)
-            });
-    
-            if (response.ok) {
-                const updatedPostData = await response.json();
-                setUserPosts(userPosts.map(post => post.id === postId ? updatedPostData.post : post));
-            } else {
-                console.error("Failed to update post");
-            }
-        } catch (error) {
-            console.error("Error updating post:", error);
-        }
+    const handleEditRedirect = (postId) => {
+        navigate(`/editPost/${postId}`);
     };
 
     return (
@@ -98,11 +80,11 @@ export const Dashboard = () => {
                         userPosts.map(post => (
                             <div className="card mb-3" style={{ width: "50rem" }} key={post.id}>
                                 <div className="card-head p-3 d-flex align-items-center">
-                                    <img className="img-user me-3" src={post.author.image} alt="" />
+                                    <img className="img-user me-3" src={post.author_image} alt="" />
                                     <span className="name-user">{post.author}</span>
                                     <div className="dashboard-icons">
                                         <i className="fa-solid fa-trash fa-lg text-danger m-1"></i>
-                                        <i className="fa-regular fa-pen-to-square fa-lg ms-1 text-warning"></i>
+                                        <i className="fa-regular fa-pen-to-square fa-lg ms-1 text-warning" onClick={() => handleEditRedirect(post.id)}></i>
                                     </div>
                                 </div>
                                 <img src={post.image} className="card-img-top img-post" alt="..." />

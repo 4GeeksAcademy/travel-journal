@@ -52,5 +52,6 @@ class Post(db.Model):
             "country": self.country,
             "image": self.image,
             "user_id": self.user_id,
-            "author": self.author.username
+            "author": self.author.username,
+            "author_image": self.author.image
         }
