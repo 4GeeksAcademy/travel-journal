@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, Navigate } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 
@@ -25,9 +25,10 @@ const Layout = () => {
             <ScrollToTop>
                 {!isLoginPage && <Navbar />}
                 <Routes basename={basename}>
+                    <Route path="/" element={<Navigate to="/login" />} /> {/* Redirige la raíz a /login */}
                     <Route element={<Login />} path="/login" />
                     <Route element={<Post />} path="/post/:theid" />
-                    <Route element={<Home />} path="/" />
+                    <Route element={<Home />} path="/home" />
                     <Route element={<Demo />} path="/demo" />
                     <Route element={<Single />} path="/single/:theid" />
                     <Route element={<h1>Not found!</h1>} />

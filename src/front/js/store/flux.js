@@ -196,12 +196,34 @@ const getState = ({ getStore, getActions, setStore }) => {
 				body: JSON.stringify(formData),
 			});
 	
-			if (response.ok) {
-				return { success: true };
-			} else {
+			if (!response.ok) {
 				const errorData = await response.json();
 				return { success: false, message: errorData.message };
 			}
+	
+			// Iniciar sesión automáticamente
+			const loginResponse = await fetch(`${process.env.BACKEND_URL}/api/login`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					username: formData.username,
+					password: formData.password
+				}),
+			});
+	
+			if (!loginResponse.ok) {
+				const errorData = await loginResponse.json();
+				return { success: false, message: errorData.message };
+			}
+	
+			const loginData = await loginResponse.json();
+			localStorage.setItem("jwt-token", loginData.access_token);
+			localStorage.setItem("user", JSON.stringify(loginData.user));
+	
+			// Retorna éxito
+			return { success: true };
 		} catch (error) {
 			return { success: false, message: "Error en la solicitud" };
 		}
