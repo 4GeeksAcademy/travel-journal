@@ -10,6 +10,8 @@ import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import { Login } from "./pages/Login";
 import { Post } from "./pages/Post";
+import { PrivateRoute } from './component/PrivateRoute';
+import { NotFound } from './component/NotFound';
 
 //create your first component
 const Layout = () => {
@@ -29,9 +31,21 @@ const Layout = () => {
                     <Route element={<Login />} path="/login" />
                     <Route element={<Post />} path="/post/:theid" />
                     <Route element={<Home />} path="/home" />
+                    {/* <Route path="/dashboard" element={
+                        <PrivateRoute>
+                            <Dashboard />
+                        </PrivateRoute>
+                        } 
+                    /> */}
+                    {/* <Route path="/settinguser" element={
+                            <PrivateRoute>
+                                <SettingUser />
+                            </PrivateRoute>
+                        } 
+                    /> */}
                     <Route element={<Demo />} path="/demo" />
                     <Route element={<Single />} path="/single/:theid" />
-                    <Route element={<h1>Not found!</h1>} />
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
                 <Footer />
             </ScrollToTop>

@@ -165,26 +165,39 @@ const getState = ({ getStore, getActions, setStore }) => {
 				return data
 		   },
 
-			getMyTasks : async () => {
-				// Recupera el token desde la localStorage
+		   fetchProtectedData : async () => {
+			try {
 				const token = localStorage.getItem('jwt-token');
+				
+				if (!token) {
+					throw new Error("Token no encontrado, por favor inicia sesión.");
+				}
 		
-				const resp = await fetch(`https://automatic-system-rq66vjwx5w635v45-3001.app.github.dev/api/protected`, {
-				method: 'GET',
-				headers: { 
-					"Content-Type": "application/json",
-					'Authorization': 'Bearer ' + token // authorization token
-				} 
+				const response = await fetch(`${process.env.BACKEND_URL}/api/protected`, {
+					method: 'GET',
+					headers: {
+						'Authorization': `Bearer ${token}`,
+						"Content-Type": "application/json",
+					},
 				});
 		
-				if(!resp.ok) {
-					throw Error("There was a problem in the login request")
-				} else if(resp.status === 403) {
-					throw Error("Missing or invalid token");
-				} else {
-					throw Error("Unknown error");
+				if (!response.ok) {
+					if (response.status === 403) {
+						throw new Error("Token faltante o inválido");
+					} else {
+						throw new Error("Error al obtener datos protegidos");
+					}
 				}
-		},
+		
+				const data = await response.json();
+				console.log('Protected data:', data);
+				return data;
+		
+			} catch (error) {
+				console.error('Error fetching protected data:', error.message);
+				throw error;
+			}
+		},	
 
 	   registerUser : async (formData) => {
 		try {
@@ -201,7 +214,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				return { success: false, message: errorData.message };
 			}
 	
-			// Iniciar sesión automáticamente
 			const loginResponse = await fetch(`${process.env.BACKEND_URL}/api/login`, {
 				method: "POST",
 				headers: {
