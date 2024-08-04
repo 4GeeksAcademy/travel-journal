@@ -36,23 +36,27 @@ export const Dashboard = () => {
     }, []);
 
     const handleDelete = async (postId) => {
-        try {
-            const token = localStorage.getItem('jwt-token');
-            const response = await fetch(`${process.env.BACKEND_URL}/api/deletePost/${postId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+        const confirmed = window.confirm("Are you sure you want to delete this post?");
+        
+        if (confirmed) {
+            try {
+                const token = localStorage.getItem('jwt-token');
+                const response = await fetch(`${process.env.BACKEND_URL}/api/deletePost/${postId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+        
+                if (response.ok) {
+                    setUserPosts(userPosts.filter(post => post.id !== postId));
+                } else {
+                    console.error("Failed to delete post");
                 }
-            });
-    
-            if (response.ok) {
-                setUserPosts(userPosts.filter(post => post.id !== postId));
-            } else {
-                console.error("Failed to delete post");
+            } catch (error) {
+                console.error("Error deleting post:", error);
             }
-        } catch (error) {
-            console.error("Error deleting post:", error);
         }
     };
 
@@ -83,7 +87,7 @@ export const Dashboard = () => {
                                     <img className="img-user me-3" src={post.author_image} alt="" />
                                     <span className="name-user">{post.author}</span>
                                     <div className="dashboard-icons">
-                                        <i className="fa-solid fa-trash fa-lg text-danger m-1"></i>
+                                    <i className="fa-solid fa-trash fa-lg text-danger m-1" onClick={() => handleDelete(post.id)}></i>
                                         <i className="fa-regular fa-pen-to-square fa-lg ms-1 text-warning" onClick={() => handleEditRedirect(post.id)}></i>
                                     </div>
                                 </div>

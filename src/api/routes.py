@@ -7,6 +7,20 @@ from flask_cors import CORS
 api = Blueprint('api', __name__)
 CORS(api)
 
+#get 1 post 
+@api.route('/post/<int:post_id>', methods=['GET'])
+@jwt_required()
+def get_post(post_id):
+    try:
+        post = Post.query.get(post_id)
+        
+        if not post:
+            return jsonify({'message': 'Post not found'}), 404
+        
+        return jsonify(post.serialize()), 200
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+#get 1 post
 #edit a post
 @api.route('/editPost/<int:post_id>', methods=['PUT'])
 @jwt_required()
@@ -45,7 +59,7 @@ def edit_post(post_id):
 def delete_post(post_id):
     try:
         current_user_id = get_jwt_identity()
-        post = post.query.get(post_id)
+        post = Post.query.get(post_id)
         if not post:
             return jsonify({'message': 'Post not found'}), 404
         if post.user_id != current_user_id:
