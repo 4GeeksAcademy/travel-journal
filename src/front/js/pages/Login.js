@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { Context } from '../store/appContext';
+import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
+    const { store, actions } = useContext(Context);
     const [showRegistro, setShowRegistro] = useState(true);
     const [formData, setFormData] = useState({
         username: "",
@@ -8,6 +11,7 @@ export const Login = () => {
         password: "",
     });
     const [errors, setErrors] = useState({});
+    const navigate = useNavigate();
 
     const handleShowRegistro = () => {
         setShowRegistro(true);
@@ -28,43 +32,85 @@ export const Login = () => {
     };
 
     const validateEmail = (email) => {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
     };
 
     const validatePassword = (password) => {
-        const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        return re.test(password);
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+        return passwordRegex.test(password);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmitRegistro = async (e) => {
         e.preventDefault();
         let validationErrors = {};
-
+    
         if (!formData.username) {
             validationErrors.username = "El nombre de usuario es requerido";
         }
-
-        if (showRegistro && !validateEmail(formData.email)) {
+    
+        if (!formData.email) {
+            validationErrors.email = "El correo electrónico es requerido";
+        } else if (!validateEmail(formData.email)) {
             validationErrors.email = "El correo electrónico no es válido";
         }
-
-        if (!validatePassword(formData.password)) {
+    
+        if (!formData.password) {
+            validationErrors.password = "La contraseña es requerida";
+        } else if (!validatePassword(formData.password)) {
             validationErrors.password = "La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y un carácter especial";
+        }
+    
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+        } else {
+            const response = await actions.registerUser(formData);
+            if (response.success) {
+                setErrors({});
+                console.log("Usuario registrado con éxito");
+                navigate('/');
+            } else {
+                setErrors({ general: response.message });
+            }
+        }
+    };
+
+    const handleSubmitLogin = async (e) => {
+        e.preventDefault();
+        const { username, password } = formData;
+
+        let validationErrors = {};
+
+        if (!username) {
+            validationErrors.username = "El usuario es requerido.";
+        }
+
+        if (!password) {
+            validationErrors.password = "La contraseña es requerida.";
         }
 
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
-        } else {
-            // Aquí puedes manejar el envío del formulario si no hay errores
-            console.log("Formulario enviado con éxito", formData);
+            return;
         }
-    };
 
+        try {
+            const data = await actions.loginUser({ username, password });
+
+            if (data.access_token) {
+                setErrors({});
+                navigate('/');
+            } else {
+                setErrors({ general: "Error en el login." });
+            }
+        } catch (error) {
+            setErrors({ general: "Error en el login: " + error.message });
+        }    
+    };
     return (
         <div className="container mt-5">
             <div className="container d-flex justify-content-center">
-             <img className="img-logo mb-5" src="https://raw.githubusercontent.com/AngelikaWebDev/travel-journal/main/src/front/img/logo.png" alt="logotipo trabel journal" />
+                <img className="img-logo mb-5" src="https://raw.githubusercontent.com/AngelikaWebDev/travel-journal/main/src/front/img/logo.png" alt="logotipo travel journal" />
             </div>
             <div className="nav justify-content-center d-flex">
                 <ul className="nav nav-tabs">
@@ -78,7 +124,7 @@ export const Login = () => {
                             aria-selected={showRegistro}
                             onClick={handleShowRegistro}
                         >
-                            <span>Registro</span>
+                            <span>Sign in</span>
                         </button>
                     </li>
                     <li className="nav-item">
@@ -98,7 +144,7 @@ export const Login = () => {
             <div className="d-flex justify-content-center">
                 {showRegistro ? (
                     <div className="container-form">
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleSubmitRegistro}>
                             <div className="mb-3">
                                 <label htmlFor="username" className="form-label text-start w-100">Username</label>
                                 <input
@@ -111,8 +157,7 @@ export const Login = () => {
                                     onChange={handleChange}
                                     required
                                 />
-                                {errors.username && <div className="form-text text-danger text-start">{errors.username}</div>}
-                            </div>
+                            {errors.username && <div className="form-text text-danger text-start">{errors.username}</div>}                            </div>
                             <div className="mb-3">
                                 <label htmlFor="email" className="form-label text-start w-100">Email address</label>
                                 <input
@@ -143,16 +188,21 @@ export const Login = () => {
                             </div>
                             <div className="mb-3 form-check d-flex justify-content-end align-items-center">
                                 <input type="checkbox" className="form-check-input me-3" id="exampleCheck1" required />
-                                <label className="form-check-label text-start" htmlFor="exampleCheck1">Aceptar política de privacidad</label>
+                                <label className="form-check-label text-start" htmlFor="exampleCheck1">I accept the Privacy Policy</label>
                             </div>
+                            {errors.general && (
+                            <div id="emailHelp" className="form-text text-danger">
+                                {errors.general}
+                            </div>
+                        )}
                             <div className="container container-btn d-flex justify-content-end">
-                                <button type="submit" className="btn btn-form">Enviar</button>
+                                <button type="submit" className="btn btn-form">Send</button>
                             </div>
                         </form>
                     </div>
                 ) : (
                     <div className="container-form">
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleSubmitLogin}>
                             <div className="mb-3">
                                 <label htmlFor="username" className="form-label text-start w-100">Username</label>
                                 <input
@@ -181,8 +231,9 @@ export const Login = () => {
                                 />
                                 {errors.password && <div className="form-text text-danger text-start">{errors.password}</div>}
                             </div>
+                            {errors.general && <div className="form-text text-danger text-start">{errors.general}</div>}
                             <div className="container container-btn d-flex justify-content-end">
-                                <button type="submit" className="btn btn-form">Enviar</button>
+                                <button type="submit" className="btn btn-form">Send</button>
                             </div>
                         </form>
                     </div>

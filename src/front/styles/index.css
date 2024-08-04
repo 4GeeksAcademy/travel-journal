@@ -1,6 +1,7 @@
 /* 
     General Styles used on every website (Don't Repeat Yourself)
 */
+
 html, body {
     margin: 0;
 }
@@ -17,6 +18,12 @@ html {
 a {
     text-decoration: none;
     
+}
+
+.dashboard-icons {
+    margin-left: auto;
+    display: flex;
+    align-items: center;    
 }
 
 .name-user {
@@ -93,3 +100,8 @@ a {
     text-align: center;
 }
 
+.dropdown-menu{
+    height: 300px; 
+    overflow-y: scroll;
+
+}
