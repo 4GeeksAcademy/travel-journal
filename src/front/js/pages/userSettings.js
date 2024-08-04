@@ -3,14 +3,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/index.css';
 import { Context } from '../store/appContext';
+import defaultImage from '../../img/default-image.jpg'; // Importa la imagen predeterminada
 
 const UserSettings = () => {
   const { actions, store } = useContext(Context);
-  const [username, setUsername] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
+  const [username, setUsername] = useState(store.user?.username || '');
+  const [imageUrl, setImageUrl] = useState(store.user && store.userImage ? store.userImage : defaultImage);
   const [message, setMessage] = useState('');
   const [imageMessage, setImageMessage] = useState('');
   const navigate = useNavigate();
+  
 
   const handleImageInsert = () => {
     const url = prompt("Por favor, introduce la URL de la imagen:");
@@ -41,9 +43,7 @@ const UserSettings = () => {
       if (result.message && result.message.includes('Error')) {
         throw new Error(result.message);
       }
-      setTimeout(() => {
-        navigate('/');
-      }, 2000);
+      navigate('/dashboard');
     } catch (error) {
       setMessage(`Error updating user: ${error.message}`);
     }
@@ -84,6 +84,8 @@ const UserSettings = () => {
         <div className="mb-3 w-50 text-center">
           <label htmlFor="username" className="form-label">
           Modify username
+
+          
           </label>
           <input
             type="text"

@@ -3,9 +3,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
+			userImage: localStorage.getItem("userImage") || '../../img/default-image.jpg',
 			demo: [
 				{
-					title: "FIRST",
+					
+					
 					background: "white",
 					initial: "white"
 				},
@@ -162,8 +164,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 				const data = await response.json()
 				localStorage.setItem("jwt-token", data.access_token);
+				localStorage.setItem("userImage", data.user.image);
 				localStorage.setItem("user",JSON.stringify(data.user))
-				return data
+				setStore({ user: data.user, userImage: data.user.image });  // Guardar en el store
+				return data;
 		   },
 
 			getMyTasks : async () => {
@@ -208,6 +212,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		// Acciones para actualizar el usuario y subir imágenes
 		
+		logout: () => {
+			localStorage.removeItem("jwt-token");
+			localStorage.removeItem("userImage");
+			localStorage.removeItem("user");
+			setStore({ user: null, userImage: defaultImage });  // Resetear el store
+			navigate('/login');
+		},
 		
 		uploadProfileImage: async (imageUrl) => {
 			try {
@@ -221,6 +232,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				body: JSON.stringify({ image_url: imageUrl }),
 			  });
 			  const data = await response.json();
+			  if (data.image_url) {
+				localStorage.setItem("userImage", data.image_url); // Guardar imagen en localStorage
+				setStore({ userImage: data.image_url }); // Actualizar el estado global
+			}
 			  return data;
 			} catch (error) {
 			  console.error("Error uploading image:", error);

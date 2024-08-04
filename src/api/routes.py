@@ -165,6 +165,20 @@ def update_user():
     db.session.commit()
     return jsonify({'message': 'User updated successfully'})
 
+@api.route('/get_user_profile', methods=['GET'])
+@jwt_required()
+def get_user_profile():
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+    
+    # Si no hay una imagen personalizada, asigna una imagen predeterminada
+    if not user.image:
+        user.image ='/img/default-image.jpg'
+    
+    return jsonify(user.serialize()), 200
+
 
 if __name__ == '__main__':
     api.run(debug=True)
