@@ -23,7 +23,8 @@ const Layout = () => {
     const isLoginPage = location.pathname === "/login";
 
     return (
-        <div>
+        <div className="wrapper">
+            <main className="main-content">
             <ScrollToTop>
                 {!isLoginPage && <Navbar />}
                 <Routes basename={basename}>
@@ -49,6 +50,7 @@ const Layout = () => {
                 </Routes>
                 <Footer />
             </ScrollToTop>
+            </main>
         </div>
     );
 };

@@ -2,12 +2,23 @@
     General Styles used on every website (Don't Repeat Yourself)
 */
 html, body {
+    height: 100%;
     margin: 0;
 }
 
 html {
     font-size: 1em;
     line-height: 1.5;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex:1;
 }
 
 .navbar {
@@ -86,7 +97,6 @@ a {
 .footer {
     background-color: #efeae4!important;
     color: #486572;
-    position: fixed;
     bottom: 0;
     width: 100%;
     padding: 1em 0;
@@ -99,3 +109,35 @@ a {
     font-weight: bold;
 }
 
+.notfound >div > h1 {
+    color:#9F353B;
+    font-size: 8em;
+    margin-right:20px;
+}
+
+.notfound > div > p {
+    font-size: 5em;
+}
+
+.notfound > p {
+    font-size: 4em;
+    color: #486572;
+}
+
+
+.notfound > a {
+    text-decoration: none;
+    background-color: #486572!important;
+    color: #fff;
+    padding: 1em;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.notfound > a:hover {
+    text-decoration: none;
+    background-color: #efeae4!important;
+    color: #486572;
+    padding: 1em;
+    border-radius: 10px;
+}
