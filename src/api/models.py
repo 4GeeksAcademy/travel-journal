@@ -12,6 +12,8 @@ class User(db.Model):
     password = db.Column(db.String(80), nullable=False)
     image = db.Column(db.String(250), nullable=True)
     post = db.relationship('Post', backref='author', lazy=True)
+    likes = db.relationship('Like', backref='user', lazy=True)
+    comments = db.relationship('Comment', backref='user', lazy=True)
 
     def generate_hash_password(password):
         return bcrypt.generate_password_hash(password).decode('utf-8')
@@ -39,6 +41,8 @@ class Post(db.Model):
     country = db.Column(db.String(100), nullable=False)
     image = db.Column(db.String(200), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    likes = db.relationship('Like', backref='post', lazy=True)
+    comments = db.relationship('Comment', backref='post', lazy=True)
 
     def __repr__(self):
         return f'<Post {self.title}>'
@@ -53,5 +57,25 @@ class Post(db.Model):
             "image": self.image,
             "user_id": self.user_id,
             "author": self.author.username,
-            "author_image": self.author.image
+            "author_image": self.author.image,
+            "like_count": len(self.likes),
+            "comment_count": len(self.comments)
         }
+    
+class Like(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return f'<Like post_id={self.post_id} user_id={self.user_id}>'
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    date = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
+
+    def __repr__(self):
+        return f'<Comment post_id={self.post_id} user_id={self.user_id} content={self.content}>'
