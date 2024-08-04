@@ -59,7 +59,9 @@ class Post(db.Model):
             "author": self.author.username,
             "author_image": self.author.image,
             "like_count": len(self.likes),
-            "comment_count": len(self.comments)
+            "comment_count": len(self.comments),
+            "comments": [comment.serialize() for comment in self.comments],
+            "likes": [like.serialize() for like in self.likes]
         }
     
 class Like(db.Model):
@@ -69,6 +71,11 @@ class Like(db.Model):
 
     def __repr__(self):
         return f'<Like post_id={self.post_id} user_id={self.user_id}>'
+    def serialize(self):
+        return {
+            "post_id": self.post_id,
+            "user_id": self.user_id
+        }
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -78,4 +85,15 @@ class Comment(db.Model):
     date = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
 
     def __repr__(self):
-        return f'<Comment post_id={self.post_id} user_id={self.user_id} content={self.content}>'
+        return f'<Comment {self.content[:20]}>'
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "post_id": self.post_id,
+            "user_id": self.user_id,
+            "content": self.content,
+            "date": self.date.isoformat(),
+            "user": self.user.username,
+            "user_image": self.user.image
+        }
