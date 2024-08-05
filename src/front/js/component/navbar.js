@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link,useNavigate } from "react-router-dom";
 import getState from "../store/flux"; 
+import defaultImage from '../../img/default-image.jpg';
+import { Context } from "../store/appContext";
+
+
 
 export const Navbar = () => {
+	const {store, actions} = useContext(Context);
+    const navigate = useNavigate();
+
+	const username = store.user?.username || 'username';
+	const userImage = store.user && store.userImage ? store.userImage : defaultImage;
+	
+	const handleLogout = () => {
+        actions.logout(); // Llama a la función de logout
+        navigate('/login'); // Redirige al usuario a la página de login
+    };
 
 	return (
 		<>
@@ -11,8 +25,8 @@ export const Navbar = () => {
 				<img src="https://raw.githubusercontent.com/4GeeksAcademy/travel-journal/main/src/front/img/logotipo.png" alt="logotipo travel journal" />
 				<Link to="/settings">
 					<div className="container-user">
-						<span className="name-user">username</span>
-						<img className="img-user ms-3" src="https://www.dzoom.org.es/wp-content/uploads/2020/02/portada-foto-perfil-redes-sociales-consejos-810x540.jpg" alt="" />
+						<span className="name-user">{username}</span>
+						<img className="img-user ms-3" src={userImage} alt="" />
 					</div>
 				</Link>
 			</div>
@@ -21,3 +35,4 @@ export const Navbar = () => {
 		
 	);
 };
+
