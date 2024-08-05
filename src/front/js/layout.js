@@ -21,14 +21,15 @@ const Layout = () => {
 
     const location = useLocation();
     const isLoginPage = location.pathname === "/login";
+    const isNotFound = location.pathname === "*";
 
     return (
         <div className="wrapper">
             <main className="main-content">
             <ScrollToTop>
-                {!isLoginPage && <Navbar />}
+                {!isLoginPage && !isNotFound && <Navbar />}
                 <Routes basename={basename}>
-                    <Route path="/" element={<Navigate to="/login" />} /> {/* Redirige la raíz a /login */}
+                    <Route path="/" element={<Navigate to="/login" />} /> 
                     <Route element={<Login />} path="/login" />
                     <Route element={<Post />} path="/post/:theid" />
                     <Route element={<Home />} path="/home" />

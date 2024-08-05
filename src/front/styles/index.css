@@ -11,6 +11,12 @@ html {
     line-height: 1.5;
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
 .wrapper {
     display: flex;
     flex-direction: column;
@@ -19,6 +25,7 @@ html {
 
 main {
     flex:1;
+    padding:2em;
 }
 
 .navbar {
@@ -109,6 +116,15 @@ a {
     font-weight: bold;
 }
 
+.navbarnotfound {
+    border-bottom: 2px solid #486572;
+}
+
+.notfoundlogo {
+    width: 100px;
+    margin:0 1em;
+}
+
 .notfound >div > h1 {
     color:#9F353B;
     font-size: 8em;
@@ -123,7 +139,6 @@ a {
     font-size: 4em;
     color: #486572;
 }
-
 
 .notfound > a {
     text-decoration: none;

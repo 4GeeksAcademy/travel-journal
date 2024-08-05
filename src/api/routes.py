@@ -74,42 +74,7 @@ def login():
     except Exception as e:
         return jsonify({"message": "Error inesperado"}), 500
     
-@api.route('/forgot-password', methods=['POST'])
-def forgot_password():
-    data = request.get_json() 
-    email = data.get('email')  
-    user = User.query.filter_by(email = email).first()
 
-    if not user:
-        return jsonify('Unregistered email')
-    token = create_access_token(identity=user.id, expires_delta=timedelta(minutes=5))
-    string_template_html = f"""
-        <html>
-            <body>
-                <p>Click on the following <a href="https://automatic-system-rq66vjwx5w635v45-3001.app.github.dev/{token}" className="link-tx">link</a> to recover your password</p>
-            </body>
-        </html>
-    """
-    msg = Message(
-        'Restablecer contraseña',
-        sender='noreply@example.com',
-        recipients=[user.email],
-        html=string_template_html
-    )
-    mail.send(msg)
-    return jsonify({'msg':'Email sent succesfully!'})
-
-@api.route("/reset-password", methods=['POST'])
-@jwt_required()
-def reset_password():
-    user_id = get_jwt_identity()
-    new_password = request.json.get('password')
-    user = User.query.get(user_id)
-    if not user:
-        return jsonify({"msg":"User not found"})
-    user.password = user.generate_hash_password(new_password)
-    db.session.commit()
-    return jsonify({"msg":"Password changed successfully"})
 
 @api.route("/protected", methods=["GET"])
 @jwt_required()
