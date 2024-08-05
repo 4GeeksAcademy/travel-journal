@@ -8,6 +8,7 @@ export const Post = () => {
     const params = useParams();
     const [isLiked, setIsLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
+    const [comment, SetComment] = useState("")
 
     useEffect(() => {
         if (!store.posts || store.posts.length === 0) {
@@ -69,7 +70,7 @@ export const Post = () => {
                     <div className="comments">
                     <div className="form-floating">
   <textarea className="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
-  <label htmlFor="floatingTextarea">Comments</label>
+  <label htmlFor="floatingTextarea">send your comments</label>
 </div>
                     </div>
                 </div>                
