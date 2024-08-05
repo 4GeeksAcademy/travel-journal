@@ -6,6 +6,8 @@ import "../../styles/post.css";
 export const Post = () => {
     const { store, actions } = useContext(Context);
     const params = useParams();
+    const [isLiked, setIsLiked] = useState(false);
+    const [likeCount, setLikeCount] = useState(0);
 
     useEffect(() => {
         if (!store.posts || store.posts.length === 0) {
@@ -13,7 +15,25 @@ export const Post = () => {
         }
     }, [actions, store.posts]);
 
+    useEffect(() => {
+        if (post) {
+            const liked = store.likes.some(like => like.post_id === post.id && like.user_id === store.user.id);
+            setIsLiked(liked);
+            setLikeCount(post.like_count);
+        }
+    }, [store.likes, store.user, post]);
+
     const post = store.posts ? store.posts.find(p => p.id === parseInt(params.theid)) : null;
+
+    const handleToggleLike = async () => {
+        const response = await actions.toggleLike(post.id);
+        if (response.success) {
+            setIsLiked(!isLiked);
+            setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
+        } else {
+            console.error(response.message);
+        }
+    };
 
     if (!post) {
         return <div>Post not found.</div>;
@@ -36,15 +56,24 @@ export const Post = () => {
                     <div className="card-body">
                         <div className="body-header d-flex justify-content-between">
                             <h5 className="card-title">{post.title}</h5>
-                            <div className="btn-like-comment">
-                                <i className="fa-solid fa-comment"></i>
-                                <i className="fa-solid fa-heart ms-1"></i>
+                            <div className="btn-like-comment d-flex">
+                                <i className="fa-solid fa-comment m-2"></i>
+                                <div className="like-section" onClick={handleToggleLike}>
+                                    <i className={`fa-solid fa-heart m-1 ${isLiked ? "liked" : ""}`}></i>
+                                    <span className="like-count">{likeCount}</span>
+                                </div>
                             </div>
                         </div>
                         <p className="card-text text-start">{post.description}</p>
                     </div>
-                </div>
-            </div>
+                    <div className="comments">
+                    <div className="form-floating">
+  <textarea className="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
+  <label htmlFor="floatingTextarea">Comments</label>
+</div>
+                    </div>
+                </div>                
+            </div>            
         </div>
     );
 }

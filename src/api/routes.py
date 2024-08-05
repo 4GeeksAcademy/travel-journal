@@ -6,7 +6,30 @@ from flask_cors import CORS
 
 api = Blueprint('api', __name__)
 CORS(api)
+# likes
+@api.route('/post/<int:post_id>/like', methods=['POST'])
+@jwt_required()
+def toggle_like(post_id):
+    try:
+        current_user_id = get_jwt_identity()
 
+        post = Post.query.get(post_id)
+        if not post:
+            return jsonify({'message': 'Post not found'}), 404
+
+        existing_like = Like.query.filter_by(post_id=post_id, user_id=current_user_id).first()
+        if existing_like:
+            db.session.delete(existing_like)
+            db.session.commit()
+            return jsonify({'message': 'Like removed successfully'}), 200
+        else:
+            new_like = Like(post_id=post_id, user_id=current_user_id)
+            db.session.add(new_like)
+            db.session.commit()
+            return jsonify({'message': 'Like added successfully'}), 201
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+#likes
 # Add a comment
 @api.route('/post/<int:post_id>/addComment', methods=['POST'])
 @jwt_required()

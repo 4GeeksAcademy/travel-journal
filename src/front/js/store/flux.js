@@ -17,10 +17,44 @@ const getState = ({ getStore, getActions, setStore }) => {
             countries: [],
             selectedCountry: '',
             posts: [],
-            filteredPosts: []			
+            filteredPosts: [],
+			comments: [],
+			likes: []
 
 		},
 		actions: {
+			toggleLike: async (postId) => {
+                try {
+                    const token = localStorage.getItem('jwt-token');
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/post/${postId}/like`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        const store = getStore();
+                        // Update the likes array based on the response
+                        let updatedLikes;
+                        if (data.message === 'Like removed successfully') {
+                            updatedLikes = store.likes.filter(like => like.post_id !== postId);
+                        } else {
+                            updatedLikes = [...store.likes, { post_id: postId, user_id: store.user.id }];
+                        }
+                        setStore({ likes: updatedLikes });
+                        return { success: true, message: data.message };
+                    } else {
+                        const errorData = await response.json();
+                        return { success: false, message: errorData.message };
+                    }
+                } catch (error) {
+                    console.error("Error toggling like:", error);
+                    return { success: false, message: "Error toggling like" };
+                }
+            },
 			editPost: async (postId, updatedPost) => {
                 try {
                     const token = localStorage.getItem('jwt-token');
@@ -56,6 +90,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					
 				}
 			},
+			
 			getCountries: async () => {
 				try {
 					const response = await fetch("https://restcountries.com/v3.1/all");
