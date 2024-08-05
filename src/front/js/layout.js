@@ -12,6 +12,7 @@ import { Login } from "./pages/Login";
 import { Post } from "./pages/Post";
 import { Dashboard } from "./pages/dashboard";
 import EditPostForm from "./pages/editPostForm";
+import UserSettings from "./pages/userSettings";
 
 //create your first component
 const Layout = () => {

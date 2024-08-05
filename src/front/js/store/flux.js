@@ -18,8 +18,9 @@ const getState = ({ getStore, getActions, setStore }) => {
             selectedCountry: '',
             posts: [],
             filteredPosts: []			
-
 		},
+		userImage: localStorage.getItem("userImage") || '../../img/default-image.jpg',
+
 		actions: {
 			editPost: async (postId, updatedPost) => {
                 try {
