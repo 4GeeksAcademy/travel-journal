@@ -11,7 +11,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
     image = db.Column(db.String(250), nullable=True)
-    posts = db.relationship('Post', backref='author', lazy=True)
+    post = db.relationship('Post', backref='author', lazy=True)
 
     def generate_hash_password(password):
         return bcrypt.generate_password_hash(password).decode('utf-8')
@@ -20,7 +20,7 @@ class User(db.Model):
         return bcrypt.check_password_hash(self.password, password)
 
     def __repr__(self):
-        return f'<User {self.email}>'
+        return f'<User {self.username}>'
 
     def serialize(self):
         return {
@@ -52,5 +52,6 @@ class Post(db.Model):
             "country": self.country,
             "image": self.image,
             "user_id": self.user_id,
-            "author": self.user.username
+            "author": self.author.username,
+            "author_image": self.author.image
         }

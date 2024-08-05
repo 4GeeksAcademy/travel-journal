@@ -107,7 +107,6 @@ export const Login = () => {
             setErrors({ general: "Error en el login: " + error.message });
         }    
     };
-
     return (
         <div className="container mt-5">
             <div className="container d-flex justify-content-center">
