@@ -1,12 +1,73 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, jwt_required,unset_jwt_cookies
-from api.models import db, User, Post
+from api.models import db, User, Post, Comment, Like
 from sqlalchemy.exc import SQLAlchemyError
 from flask_cors import CORS
 
 api = Blueprint('api', __name__)
 CORS(api)
+# likes
+@api.route('/post/<int:post_id>/like', methods=['POST'])
+@jwt_required()
+def toggle_like(post_id):
+    try:
+        current_user_id = get_jwt_identity()
 
+        post = Post.query.get(post_id)
+        if not post:
+            return jsonify({'message': 'Post not found'}), 404
+
+        existing_like = Like.query.filter_by(post_id=post_id, user_id=current_user_id).first()
+        if existing_like:
+            db.session.delete(existing_like)
+            db.session.commit()
+            return jsonify({'message': 'Like removed successfully'}), 200
+        else:
+            new_like = Like(post_id=post_id, user_id=current_user_id)
+            db.session.add(new_like)
+            db.session.commit()
+            return jsonify({'message': 'Like added successfully'}), 201
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+#likes
+# Add a comment
+@api.route('/post/<int:post_id>/addComment', methods=['POST'])
+@jwt_required()
+def add_comment(post_id):
+    try:
+        current_user_id = get_jwt_identity()
+        data = request.get_json()
+        content = data.get('content')
+
+        if not content:
+            return jsonify({'message': 'Content is required'}), 400
+
+        post = Post.query.get(post_id)
+        if not post:
+            return jsonify({'message': 'Post not found'}), 404
+
+        new_comment = Comment(content=content, post_id=post_id, user_id=current_user_id)
+        db.session.add(new_comment)
+        db.session.commit()
+
+        return jsonify({'message': 'Comment added successfully', 'comment': new_comment.serialize()}), 201
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+
+# Get comments for a post
+@api.route('/post/<int:post_id>/comments', methods=['GET'])
+def get_comments(post_id):
+    try:
+        post = Post.query.get(post_id)
+        if not post:
+            return jsonify({'message': 'Post not found'}), 404
+
+        comments = Comment.query.filter_by(post_id=post_id).all()
+        comments = [comment.serialize() for comment in comments]
+
+        return jsonify(comments), 200
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
 #get 1 post 
 @api.route('/post/<int:post_id>', methods=['GET'])
 @jwt_required()

@@ -7,3 +7,16 @@
     text-decoration: none;
     z-index: 1000;
 }
+
+.liked {
+    color: darkred; 
+}
+
+.like-section {
+    display: flex;
+    align-items: center;
+}
+
+.like-count {
+    margin-left: 5px;
+}
