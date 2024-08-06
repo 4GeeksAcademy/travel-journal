@@ -69,7 +69,7 @@ export const Home = () => {
                     </ul>
                 </div>
             </div>
-            <h5>{store.selectedCountry || 'Select a country'}</h5>
+            <h5>{store.selectedCountry || 'All countries'}</h5>
             <div className="row">
                 {store.filteredPosts && store.filteredPosts.length > 0 ? (
                     store.filteredPosts.map(post => (

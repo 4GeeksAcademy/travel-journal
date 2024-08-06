@@ -65,12 +65,13 @@ export const Dashboard = () => {
     };
 
     return (
+        <>
+        <div className="container-fluid d-flex container-back mt-3 ms-4">
+            <Link to="/home" className='container-back-icon'>
+                <i className="fa-solid fa-arrow-left"></i>
+            </Link>
+        </div>
         <div className="container-fluid mt-5 h-100">
-            <div className="container-fluid d-flex container-back">
-                <Link to="/" className="back-home-link">
-                    <i className="fa-solid fa-arrow-left"></i>
-                </Link>
-            </div>
             <div className="container-fluid d-flex justify-content-center">
                 <Link to="/addAPost">
                     <button className="btn btn-form m-3">Add a new Post</button>
@@ -108,5 +109,6 @@ export const Dashboard = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };

@@ -62,12 +62,13 @@ export const Post = () => {
     }
 
     return (
+        <>
+        <div className="container-fluid d-flex container-back mt-3 ms-4">
+            <Link to="/home" className='container-back-icon'>
+                <i className="fa-solid fa-arrow-left"></i>
+            </Link>
+        </div>
         <div className="container-fluid mt-5 h-100">
-            <div className="container-fluid d-flex container-back">
-                <Link to="/" className="back-home-link">
-                    <i className="fa-solid fa-arrow-left"></i>
-                </Link>
-            </div>
             <div className="container-fluid d-flex justify-content-center">
                 <div className="card" style={{ width: "50rem" }}>
                     <div className="card-head p-3 d-flex align-items-center">
@@ -121,5 +122,6 @@ export const Post = () => {
                 </div>                
             </div>            
         </div>
+        </>
     );
 };
