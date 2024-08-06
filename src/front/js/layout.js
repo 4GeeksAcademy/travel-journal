@@ -4,8 +4,6 @@ import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 import AddPostForm from "./pages/addPostForm";
 import { Home } from "./pages/home";
-import { Demo } from "./pages/demo";
-import { Single } from "./pages/single";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import { Login } from "./pages/Login";
@@ -37,23 +35,20 @@ const Layout = () => {
                     <Route element={<ResetPassword />} path="/reset-password" />
                     <Route element={<ForgotPassword />} path="/forgot-password" />
                     <Route element={<Home />} path="/home" />
-                    {/* <Route path="/dashboard" element={
+                    <Route path="/dashboard" element={
                         <PrivateRoute>
                             <Dashboard />
                         </PrivateRoute>
                         } 
-                    /> */}
-                    {/* <Route path="/settinguser" element={
+                    />
+                    <Route path="/settings" element={
                             <PrivateRoute>
-                                <SettingUser />
+                                <UserSettings />
                             </PrivateRoute>
                         } 
-                    /> */}
-                    <Route element={<Demo />} path="/demo" />
-                    <Route element={<Dashboard />} path="/dashboard" />
+                    />
                     <Route element={<AddPostForm />} path="/AddAPost" />
                     <Route element={<EditPostForm />} path="/editPost/:postId" />
-                    <Route element={<Single />} path="/single/:theid" />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
                 <Footer />
