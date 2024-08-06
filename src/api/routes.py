@@ -1,8 +1,13 @@
-from flask import Blueprint, request, jsonify
-from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, jwt_required,unset_jwt_cookies
+from datetime import timedelta
+from email.message import Message
+from flask import Blueprint, current_app, request, jsonify
+from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, jwt_required, unset_jwt_cookies
+
 from api.models import db, User, Post
 from sqlalchemy.exc import SQLAlchemyError
 from flask_cors import CORS
+from flask_mail import Message
+from api.mail_extension import mail
 
 api = Blueprint('api', __name__)
 CORS(api)
@@ -174,6 +179,8 @@ def login():
         return jsonify({"message": "Error al procesar la solicitud"}), 500
     except Exception as e:
         return jsonify({"message": "Error inesperado"}), 500
+    
+
 
 @api.route("/protected", methods=["GET"])
 @jwt_required()

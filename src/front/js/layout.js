@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, Navigate } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 import AddPostForm from "./pages/addPostForm";
@@ -10,6 +10,10 @@ import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import { Login } from "./pages/Login";
 import { Post } from "./pages/Post";
+import { ForgotPassword } from "./pages/ForgotPassword"
+import { ResetPassword } from "./pages/ResetPassword";
+import { PrivateRoute } from './component/PrivateRoute';
+import { NotFound } from './component/NotFound';
 import { Dashboard } from "./pages/dashboard";
 import EditPostForm from "./pages/editPostForm";
 import UserSettings from "./pages/userSettings";
@@ -20,24 +24,41 @@ const Layout = () => {
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL === "") return <BackendURL />;
     const location = useLocation();
     const isLoginPage = location.pathname === "/login";
+    const isNotFound = location.pathname === "*";
     return (
-        <div>
+        <div className="wrapper">
+            <main className="main-content">
             <ScrollToTop>
-                {!isLoginPage && <Navbar />}
+                {!isLoginPage && !isNotFound && <Navbar />}
                 <Routes basename={basename}>
+                    <Route path="/" element={<Navigate to="/login" />} /> 
                     <Route element={<Login />} path="/login" />
                     <Route element={<Post />} path="/post/:theid" />
-                    <Route element={<Home />} path="/" />
-					<Route element={<UserSettings />} path="/settings" />
+                    <Route element={<ResetPassword />} path="/reset-password" />
+                    <Route element={<ForgotPassword />} path="/forgot-password" />
+                    <Route element={<Home />} path="/home" />
+                    {/* <Route path="/dashboard" element={
+                        <PrivateRoute>
+                            <Dashboard />
+                        </PrivateRoute>
+                        } 
+                    /> */}
+                    {/* <Route path="/settinguser" element={
+                            <PrivateRoute>
+                                <SettingUser />
+                            </PrivateRoute>
+                        } 
+                    /> */}
                     <Route element={<Demo />} path="/demo" />
                     <Route element={<Dashboard />} path="/dashboard" />
                     <Route element={<AddPostForm />} path="/AddAPost" />
                     <Route element={<EditPostForm />} path="/editPost/:postId" />
                     <Route element={<Single />} path="/single/:theid" />
-                    <Route element={<h1>Not found!</h1>} />
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
                 <Footer />
             </ScrollToTop>
+            </main>
         </div>
     );
 };
