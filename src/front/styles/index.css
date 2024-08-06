@@ -118,6 +118,11 @@ a {
     text-align: center;
 }
 
+.countries-dd{
+    height: 300px; 
+    overflow-y: scroll;
+}
+
 .menu{
 .link-tx {
     text-decoration: none;
@@ -164,9 +169,4 @@ a {
     color: #486572;
     padding: 1em;
     border-radius: 10px;
-}
-  
-.dropdown-menu{
-    height: 300px; 
-    overflow-y: scroll;
 }
