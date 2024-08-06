@@ -11,7 +11,10 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
     image = db.Column(db.String(250), nullable=True)
-    post = db.relationship('Post', backref='author', lazy=True)
+
+    posts = db.relationship('Post', backref='author', lazy=True)
+    
+    @staticmethod
 
     def generate_hash_password(password):
         return bcrypt.generate_password_hash(password).decode('utf-8')
@@ -19,8 +22,11 @@ class User(db.Model):
     def verificated_password(self,password):
         return bcrypt.check_password_hash(self.password, password)
 
+    def set_password(self, password):
+        self.password = self.generate_hash_password(password)
+
     def __repr__(self):
-        return f'<User {self.username}>'
+        return f'<User {self.email}>'
 
     def serialize(self):
         return {
