@@ -62,7 +62,7 @@ const AddPostForm = () => {
                         <button className="btn btn-form  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                             {country || 'Select a country'}
                         </button>
-                        <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <ul className="dropdown-menu countries-dd" aria-labelledby="dropdownMenuButton1">
                             <li>
                                 <input
                                     type="text"
