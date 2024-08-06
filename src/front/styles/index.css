@@ -105,6 +105,7 @@ a {
     background-color: #efeae4!important;
     color: #486572;
     bottom: 0;
+    position: fixed;
     width: 100%;
     padding: 1em 0;
     text-align: center;

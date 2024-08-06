@@ -10,6 +10,8 @@ import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import { Login } from "./pages/Login";
 import { Post } from "./pages/Post";
+import { ForgotPassword } from "./pages/ForgotPassword"
+import { ResetPassword } from "./pages/ResetPassword";
 import { PrivateRoute } from './component/PrivateRoute';
 import { NotFound } from './component/NotFound';
 
@@ -32,6 +34,8 @@ const Layout = () => {
                     <Route path="/" element={<Navigate to="/login" />} /> 
                     <Route element={<Login />} path="/login" />
                     <Route element={<Post />} path="/post/:theid" />
+                    <Route element={<ResetPassword />} path="/reset-password" />
+                    <Route element={<ForgotPassword />} path="/forgot-password" />
                     <Route element={<Home />} path="/home" />
                     {/* <Route path="/dashboard" element={
                         <PrivateRoute>

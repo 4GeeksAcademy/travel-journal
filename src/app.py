@@ -15,10 +15,14 @@ from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity
 from flask_cors import CORS
 from flask_mail import Mail, Message
 from api.mail_extension import mail
+from urllib.parse import quote
+
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../public/')
 app = Flask(__name__)
+CORS(app)
+
 app.url_map.strict_slashes = False
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
@@ -81,12 +85,14 @@ def forgot_password():
     user = User.query.filter_by(email = email).first()
 
     if not user:
-        return jsonify('Unregistered email')
+        return jsonify({'msg': 'Si existe una cuenta con ese correo, se enviará un enlace para restablecer la contraseña'}), 200
+
     token = create_access_token(identity=user.id, expires_delta=timedelta(minutes=5))
+    encoded_token = quote(token)
     string_template_html = f"""
         <html>
             <body>
-                <p>Click on the following <a href="https://automatic-system-rq66vjwx5w635v45-3001.app.github.dev/{token}" className="link-tx">link</a> to recover your password</p>
+                <p>Click on the following <a href="https://automatic-system-rq66vjwx5w635v45-3000.app.github.dev/reset-password?token={encoded_token}" className="link-tx">link</a> to recover your password</p>
             </body>
         </html>
     """
@@ -99,11 +105,10 @@ def forgot_password():
 
     try:
         mail.send(msg)
-        return jsonify({'msg':'Email sent successfully!'})
+        return jsonify({'msg': 'Email sent successfully!'}), 200
     except Exception as e:
         print(f"Failed to send email: {str(e)}")
-        return jsonify({'error': 'Failed to send email'}), 500
-
+        return jsonify({'error': 'email_failed', 'msg': 'Failed to send email.'}), 500
 
 @app.route("/reset-password", methods=['POST'])
 @jwt_required()
@@ -112,10 +117,13 @@ def reset_password():
     new_password = request.json.get('password')
     user = User.query.get(user_id)
     if not user:
-        return jsonify({"msg":"User not found"})
-    user.password = user.generate_hash_password(new_password)
+        return jsonify({"error": "user_not_found", "msg": "User not found"}), 404
+    if not new_password or len(new_password) < 8:
+        return jsonify({"error": "weak_password", "msg": "Password must be at least 8 characters long"}), 400
+    
+    user.set_password(new_password)
     db.session.commit()
-    return jsonify({"msg":"Password changed successfully"})
+    return jsonify({"msg": "Password changed successfully"}), 200
 
 # This only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
