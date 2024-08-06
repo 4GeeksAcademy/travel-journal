@@ -1,0 +1,40 @@
+.navbar-logo {
+    width: 180px; /* Ajusta el tamaño del logo según sea necesario */
+}
+
+.user-.navbar {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+.username-text {
+    font-size: 0.9rem; /* Ajusta el tamaño de la fuente del nombre de usuario */
+    font-weight: 600;
+    color: #333333;
+}
+
+.img-user {
+    width: 30px; /* Ajusta el tamaño de la imagen del usuario */
+    height: 30px; /* Ajusta el tamaño de la imagen del usuario */
+    object-fit: cover;
+    border: 2px solid #291b6f;
+}
+
+.navbar-menu {
+    width: 120px; 
+    padding: 5px; 
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-item {
+    padding: 5px 10px; 
+    font-size: 0.9rem; 
+}
+
+.navbar-item:hover {
+    background-color: #1c066b;
+}
+
