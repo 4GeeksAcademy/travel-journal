@@ -18,10 +18,11 @@ const getState = ({ getStore, getActions, setStore }) => {
             selectedCountry: '',
             posts: [],
             filteredPosts: [],
-			comments: [],
-			likes: []
-
+			      comments: [],
+			      likes: []
 		},
+		userImage: localStorage.getItem("userImage") || '../../img/default-image.jpg',
+
 		actions: {
 			//get comments
 			getComments: async (postId) => {
@@ -214,54 +215,139 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 				const data = await response.json()
 				localStorage.setItem("jwt-token", data.access_token);
+				localStorage.setItem("userImage", data.user.image);
 				localStorage.setItem("user",JSON.stringify(data.user));
 				setStore({ user: data.user }); // linea añadida por edu
-				return data
+				setStore({ user: data.user, userImage: data.user.image });  // Guardar en el store
+				return data;
 		   },
 
-			getMyTasks : async () => {
-				// Recupera el token desde la localStorage
+		   fetchProtectedData : async () => {
+			try {
 				const token = localStorage.getItem('jwt-token');
+				
+				if (!token) {
+					throw new Error("Token no encontrado, por favor inicia sesión.");
+				}
 		
-				const resp = await fetch(`https://automatic-system-rq66vjwx5w635v45-3001.app.github.dev/api/protected`, {
-				method: 'GET',
-				headers: { 
-					"Content-Type": "application/json",
-					'Authorization': 'Bearer ' + token // authorization token
-				} 
+				const response = await fetch(`${process.env.BACKEND_URL}/api/protected`, {
+					method: 'GET',
+					headers: {
+						'Authorization': `Bearer ${token}`,
+						"Content-Type": "application/json",
+					},
 				});
 		
-				if(!resp.ok) {
-					throw Error("There was a problem in the login request")
-				} else if(resp.status === 403) {
-					throw Error("Missing or invalid token");
-				} else {
-					throw Error("Unknown error");
+				if (!response.ok) {
+					if (response.status === 403) {
+						throw new Error("Token faltante o inválido");
+					} else {
+						throw new Error("Error al obtener datos protegidos");
+					}
 				}
-		},
+		
+				const data = await response.json();
+				console.log('Protected data:', data);
+				return data;
+		
+			} catch (error) {
+				console.error('Error fetching protected data:', error.message);
+				throw error;
+			}
+		},	
 
 	   registerUser : async (formData) => {
 		try {
 			const response = await fetch(`${process.env.BACKEND_URL}/api/register`, {
+			  method: "POST",
+			  headers: {
+				"Content-Type": "application/json",
+			  },
+			  body: JSON.stringify(formData),
+			});
+			if (!response.ok) {
+				const errorData = await response.json();
+				return { success: false, message: errorData.message };
+			}
+	
+			const loginResponse = await fetch(`${process.env.BACKEND_URL}/api/login`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify(formData),
+				body: JSON.stringify({
+					username: formData.username,
+					password: formData.password
+				}),
 			});
 	
-			if (response.ok) {
-				return { success: true };
-			} else {
-				const errorData = await response.json();
+			if (!loginResponse.ok) {
+				const errorData = await loginResponse.json();
 				return { success: false, message: errorData.message };
 			}
+	
+			const loginData = await loginResponse.json();
+			localStorage.setItem("jwt-token", loginData.access_token);
+			localStorage.setItem("user", JSON.stringify(loginData.user));
+	
+			// Retorna éxito
+			return { success: true };
 		} catch (error) {
 			return { success: false, message: "Error en la solicitud" };
+		  }
+		},
+		// Acciones para actualizar el usuario y subir imágenes
+		
+		logout: () => {
+			localStorage.removeItem("jwt-token");
+			localStorage.removeItem("userImage");
+			localStorage.removeItem("user");
+			setStore({ user: null, userImage: defaultImage });  // Resetear el store
+			navigate('/login');
+		},
+		
+		uploadProfileImage: async (imageUrl) => {
+			try {
+			  const token = localStorage.getItem("jwt-token"); // Obtén el token JWT
+			  const response = await fetch(`${process.env.BACKEND_URL}/api/upload_profile_image`, {
+				method: "POST",
+				headers: {
+				  "Content-Type": "application/json",
+				  'Authorization': 'Bearer ' + token  // Agrega el token en los headers
+				},
+				body: JSON.stringify({ image_url: imageUrl }),
+			  });
+			  const data = await response.json();
+			  if (data.image_url) {
+				localStorage.setItem("userImage", data.image_url); // Guardar imagen en localStorage
+				setStore({ userImage: data.image_url }); // Actualizar el estado global
+			}
+			  return data;
+			} catch (error) {
+			  console.error("Error uploading image:", error);
+			  return { message: 'Error uploading image.' };
+			}
+		  },
+		  updateUser: async (userId, username) => {
+			try {
+			  const token = localStorage.getItem("jwt-token"); // Obtén el token JWT
+			  const response = await fetch(`${process.env.BACKEND_URL}/api/update_user`, {
+				method: "PUT",
+				headers: {
+				  "Content-Type": "application/json",
+				  'Authorization': 'Bearer ' + token  // Agrega el token en los headers
+				},
+				body: JSON.stringify({ id: userId, username }),
+			  });
+			  const data = await response.json();
+			  return data;
+			} catch (error) {
+			  console.error("Error updating user:", error);
+			  return { message: 'Error updating user.' };
+			}
+		  },
 		}
-	},
+	  };
+	};
 	
-        }
-    };
-};
-export default getState;
+	export default getState;

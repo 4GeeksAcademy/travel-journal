@@ -3,6 +3,9 @@ import { Link, useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
 import "../../styles/post.css";
 
+
+
+
 export const Post = () => {
     const { store, actions } = useContext(Context);
     const params = useParams();
