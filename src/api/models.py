@@ -11,6 +11,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
     image = db.Column(db.String(250), nullable=True)
+
     posts = db.relationship('Post', backref='author', lazy=True)
     
     @staticmethod
@@ -26,7 +27,6 @@ class User(db.Model):
 
     def __repr__(self):
         return f'<User {self.email}>'
-        
 
     def serialize(self):
         return {
@@ -58,5 +58,6 @@ class Post(db.Model):
             "country": self.country,
             "image": self.image,
             "user_id": self.user_id,
-            "author": self.user.username
+            "author": self.author.username,
+            "author_image": self.author.image
         }
