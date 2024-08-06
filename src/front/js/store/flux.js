@@ -23,6 +23,47 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 		},
 		actions: {
+			//get comments
+			getComments: async (postId) => {
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/post/${postId}/comments`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setStore({ comments: data });
+                    } else {
+                        console.error("Error fetching comments");
+                    }
+                } catch (error) {
+                    console.error("Error fetching comments:", error);
+                }
+            },
+			//add a comment
+			addComment: async (postId, content) => {
+                try {
+                    const token = localStorage.getItem('jwt-token');
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/post/${postId}/addComment`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ content })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        const store = getStore();
+                        setStore({ comments: [...store.comments, data.comment] });
+                        return { success: true, comment: data.comment };
+                    } else {
+                        const errorData = await response.json();
+                        return { success: false, message: errorData.message };
+                    }
+                } catch (error) {
+                    console.error("Error adding comment:", error);
+                    return { success: false, message: "Error adding comment" };
+                }
+            },
 			toggleLike: async (postId) => {
                 try {
                     const token = localStorage.getItem('jwt-token');
