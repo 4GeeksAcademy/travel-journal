@@ -119,6 +119,11 @@ a {
     text-align: center;
 }
 
+.countries-dd{
+    height: 300px; 
+    overflow-y: scroll;
+}
+
 .link-tx {
     text-decoration: none;
     color: #9F353B;
