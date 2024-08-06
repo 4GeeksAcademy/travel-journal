@@ -21,8 +21,32 @@ const Layout = () => {
     const basename = process.env.BASENAME || "";
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL === "") return <BackendURL />;
     const location = useLocation();
+
+        // List of defined routes
+        const definedRoutes = [
+            "/login",
+            "/post/:theid",
+            "/reset-password",
+            "/forgot-password",
+            "/home",
+            "/dashboard",
+            "/settings",
+            "/AddAPost",
+            "/editPost/:postId",
+            "/single/:theid"
+        ];
+    
+        // Function to check if the current path is defined
+        const isDefinedRoute = (path) => {
+            return definedRoutes.some(route => {
+                const regex = new RegExp(`^${route.replace(/:[^\s/]+/g, '[^/]+')}$`);
+                return regex.test(path);
+            });
+        };
+
     const isLoginPage = location.pathname === "/login";
-    const isNotFound = location.pathname === "*";
+    const isNotFound = !isDefinedRoute(location.pathname);    
+    
     return (
         <div className="wrapper">
             <main className="main-content">

@@ -26,7 +26,7 @@ body {
 
 main {
     flex:1;
-    padding:2em;
+    padding:0 0 2em 0;
 }
 
 .navbar {
@@ -119,7 +119,6 @@ a {
     text-align: center;
 }
 
-.menu{
 .link-tx {
     text-decoration: none;
     color: #9F353B;
@@ -167,114 +166,11 @@ a {
     border-radius: 10px;
 }
   
-.dropdown-menu{
+/* .dropdown-menu{
     height: 300px; 
     overflow-y: scroll;
+} */
 
-}
-  
-  
-/* Estilos generales */
-.back-home-link {
-    text-decoration: none;
-    color: inherit;
-    border: none;
-    outline: none;
-  }
-  
-  .back-home-link:hover,
-  .back-home-link:focus,
-  .back-home-link:active,
-  .back-home-link:visited {
-    text-decoration: none;
-    color: inherit;
-    border: none;
-    outline: none;
-    background: none;
-    box-shadow: none;
-  }
-  
-  .back-home-link i {
-    font-size: 1.5rem;
-    color: inherit;
-  }
-  
-  .profile-image {
-    width: 300px;
-    height: 300px;
-    object-fit: cover;
-    display: block;
-    margin: 0 auto 20px auto;
-  }
-  
-  .placeholder-image {
-    width: 300px;
-    height: 300px;
-    margin-bottom: 20px;
-  }
-  
-  .insert-image-label {
-    display: inline-block;
-    margin: 0 auto;
-    font-size: 0.75rem;
-    padding: 5px 10px;
-    margin-bottom: 99px;
-  }
-  
-  .username-label {
-    font-size: 1.5rem;
-  }
-  
-  .submit-button {
-    font-size: 1.25rem;
-    padding: 10px 20px;
-    background-color: #f0ad4e;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-  }
-  
-  .submit-button:hover,
-  .submit-button:focus {
-    background-color: #ec971f;
-    border: none;
-    color: #fff;
-    outline: none;
-  }
-  
-  /* Estilos responsivos */
-  @media (max-width: 768px) {
-    .profile-image,
-    .placeholder-image {
-      width: 100%;
-      height: auto;
-      margin-bottom: 20px;
-    }
-  
-    .insert-image-label {
-      font-size: 1rem;
-      padding: 10px 20px;
-      margin-bottom: 20px;
-    }
-  
-    .username-label {
-      font-size: 1.25rem;
-    }
-  
-    .submit-button {
-      font-size: 1rem;
-      padding: 10px 15px;
-    }
-  }
-  
-  @media (max-width: 576px) {
-    .username-label {
-      font-size: 1rem;
-    }
-  
-    .submit-button {
-      font-size: 0.875rem;
-      padding: 8px 12px;
-    }
-  }
+.menu{
+  min-height: 100%;
 }

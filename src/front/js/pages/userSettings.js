@@ -50,7 +50,7 @@ const UserSettings = () => {
 
   return (
     <>
-    <div className="container-fluid d-flex container-back mt-3">
+    <div className="container-fluid d-flex container-back mt-3 ms-4">
       <Link to="/home" className='container-back-icon'>
           <i className="fa-solid fa-arrow-left"></i>
       </Link>
