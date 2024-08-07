@@ -1,11 +1,8 @@
 import React, { useContext } from "react";
 import { Link,useNavigate } from "react-router-dom";
-import getState from "../store/flux"; 
 import defaultImage from '../../img/default-image.jpg';
 import { Context } from "../store/appContext";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/navbar.css';
-
 
 export const Navbar = () => {
 	const {store, actions} = useContext(Context);
@@ -13,11 +10,6 @@ export const Navbar = () => {
 
 	const username = store.user?.username || 'username';
 	const userImage = store.user && store.userImage ? store.userImage : defaultImage;
-	
-	const handleLogout = () => {
-        actions.logout(); // Llama a la función de logout
-        navigate('/login'); // Redirige al usuario a la página de login
-    };
 
 	return (
 		<>
@@ -33,7 +25,6 @@ export const Navbar = () => {
                     <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li><Link className="dropdown-item" to="/settings">User profile</Link></li>
                         <li><Link className="dropdown-item" to="/dashboard">My Posts</Link></li>
-                        {/* <li><hr className="dropdown-divider" /></li> */}
                     </ul>
                 </div>
 			</div>

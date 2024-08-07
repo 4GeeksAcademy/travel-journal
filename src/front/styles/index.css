@@ -26,7 +26,7 @@ body {
 
 main {
     flex:1;
-    padding:2em;
+    padding:0 0 2em 0;
 }
 
 .navbar {
@@ -91,12 +91,13 @@ a {
     width: 200px;
 }
 
-.container-back > i {
+.container-back-icon>i {
     font-size: 2em;
     cursor: pointer;
+    color: #000;
 }
 
-.container-back > i:hover {
+.container-back-icon>i:hover {
     font-size: 2em;
     color: #486572;
     cursor: pointer;
@@ -123,7 +124,6 @@ a {
     overflow-y: scroll;
 }
 
-.menu{
 .link-tx {
     text-decoration: none;
     color: #9F353B;
@@ -169,4 +169,13 @@ a {
     color: #486572;
     padding: 1em;
     border-radius: 10px;
+}
+
+.menu{
+  min-height: 100%;
+}
+
+.profile-image {
+    max-width: 600px;
+    max-height: 500px;
 }

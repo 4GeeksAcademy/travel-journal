@@ -41,7 +41,7 @@ export const Dashboard = () => {
         if (confirmed) {
             try {
                 const token = localStorage.getItem('jwt-token');
-                const response = await fetch(`${process.env.BACKEND_URL}/api/deletePost/${postId}`, {
+                const response = await fetch(`${process.env.BACKEND_URL}/api/deletePost/${postId}`.replace(/([^:]\/)\/+/g, "$1"), {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -52,7 +52,8 @@ export const Dashboard = () => {
                 if (response.ok) {
                     setUserPosts(userPosts.filter(post => post.id !== postId));
                 } else {
-                    console.error("Failed to delete post");
+                    const errorData = await response.json();
+                    console.error("Failed to delete post:", errorData.message || errorData);
                 }
             } catch (error) {
                 console.error("Error deleting post:", error);
@@ -65,12 +66,13 @@ export const Dashboard = () => {
     };
 
     return (
+        <>
+        <div className="container-fluid d-flex container-back mt-3 ms-4">
+            <Link to="/home" className='container-back-icon'>
+                <i className="fa-solid fa-arrow-left"></i>
+            </Link>
+        </div>
         <div className="container-fluid mt-5 h-100">
-            <div className="container-fluid d-flex container-back">
-                <Link to="/" className="back-home-link">
-                    <i className="fa-solid fa-arrow-left"></i>
-                </Link>
-            </div>
             <div className="container-fluid d-flex justify-content-center">
                 <Link to="/addAPost">
                     <button className="btn btn-form m-3">Add a new Post</button>
@@ -108,5 +110,6 @@ export const Dashboard = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };

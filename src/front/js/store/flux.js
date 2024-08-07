@@ -123,10 +123,9 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 			getPosts: async () => {
 				try {
-					const response = await fetch(process.env.BACKEND_URL + `/api/getPosts`);
+					const response = await fetch(`${process.env.BACKEND_URL}/api/getPosts`);
 					const data = await response.json();
 					setStore({ posts: data, filteredPosts: data });
-					console.log(data);					
 				} catch (error) {
 					console.error("Error fetching posts:", error);
 					
@@ -158,7 +157,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			addAPost: async(title, description, country, image) =>{
 				const store = getStore();				
 				try {
-					const response = await fetch(process.env.BACKEND_URL + `/api/addPost`, {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/addPost`, {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
@@ -190,7 +189,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     setStore({ message: data.message });
                     return data;
                 } catch (error) {
-                    console.log("Error loading message from backend", error);
+                    console.error("Error loading message from backend", error);
                 }
             },
 
@@ -247,7 +246,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 		
 				const data = await response.json();
-				console.log('Protected data:', data);
 				return data;
 		
 			} catch (error) {

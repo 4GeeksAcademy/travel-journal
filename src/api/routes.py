@@ -139,6 +139,7 @@ def delete_post(post_id):
         return jsonify({'message':'Post deleted successfully'}), 200
     except Exception as e:
         return jsonify({'message':str(e)}), 500
+
 #delete a post
 #GET ALL POSTS
 @api.route('/getPosts', methods=['GET'])

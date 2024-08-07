@@ -15,12 +15,8 @@ class User(db.Model):
     post = db.relationship('Post', backref='author', lazy=True)
     likes = db.relationship('Like', backref='user', lazy=True)
     comments = db.relationship('Comment', backref='user', lazy=True)
-
-
-
     
     @staticmethod
-
 
     def generate_hash_password(password):
         return bcrypt.generate_password_hash(password).decode('utf-8')
@@ -51,12 +47,12 @@ class Post(db.Model):
     country = db.Column(db.String(100), nullable=False)
     image = db.Column(db.String(200), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    likes = db.relationship('Like', backref='post', lazy=True)
-    comments = db.relationship('Comment', backref='post', lazy=True)
+    likes = db.relationship('Like', backref='post', lazy=True, cascade='all, delete-orphan')
+    comments = db.relationship('Comment', backref='post', lazy=True, cascade='all, delete-orphan')
 
     def __repr__(self):
         return f'<Post {self.title}>'
-
+    
     def serialize(self):
         return {
             "id": self.id,
@@ -73,6 +69,7 @@ class Post(db.Model):
             "comments": [comment.serialize() for comment in self.comments],
             "likes": [like.serialize() for like in self.likes]
         }
+
     
 class Like(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -89,7 +86,7 @@ class Like(db.Model):
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id', ondelete="CASCADE"), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     content = db.Column(db.Text, nullable=False)
     date = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))

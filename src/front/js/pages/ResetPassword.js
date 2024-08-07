@@ -43,7 +43,6 @@ export const ResetPassword = () => {
             setError('Hubo un problema con la solicitud. Inténtalo de nuevo más tarde.');
         }
     };
-console.log(token)
     return (
         <div className="d-flex justify-content-center mt-5">
             <div className="container-form">

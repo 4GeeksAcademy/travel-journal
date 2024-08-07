@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../styles/index.css';
 import { Context } from '../store/appContext';
 import defaultImage from '../../img/default-image.jpg'; // Importa la imagen predeterminada
@@ -50,13 +49,13 @@ const UserSettings = () => {
   };
 
   return (
-    <div className="container mt-1">
-      <div className="container-fluid d-flex container-back">
-        <Link to="/" className="back-home-link">
+    <>
+    <div className="container-fluid d-flex container-back mt-3 ms-4">
+      <Link to="/home" className='container-back-icon'>
           <i className="fa-solid fa-arrow-left"></i>
-        </Link>
-      </div>
-
+      </Link>
+    </div>
+    <div className="container mt-1">
       <div className="row justify-content-start mb-1"></div>
       {message && (
         <p className={`text-center ${message.includes('successfully') ? 'text-success' : 'text-danger'}`}>
@@ -69,7 +68,7 @@ const UserSettings = () => {
         </p>
       )}
       <form onSubmit={handleSubmit} className="d-flex flex-column align-items-center">
-        <div className="mb-3 text-center">
+        <div className="mb-3 text-center d-flex flex-column">
           {imageUrl ? (
             <img src={imageUrl} alt="Vista previa" className="profile-image" />
           ) : (
@@ -77,7 +76,7 @@ const UserSettings = () => {
               Profile Picture
             </div>
           )}
-          <button type="button" onClick={handleImageInsert} className="btn btn-secondary insert-image-label">
+          <button type="button" onClick={handleImageInsert} className="btn btn-form insert-image-label">
           Insert image
           </button>
         </div>
@@ -104,6 +103,7 @@ const UserSettings = () => {
         </div>
       </form>
     </div>
+    </>
   );
 };
 

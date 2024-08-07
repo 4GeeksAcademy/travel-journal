@@ -67,7 +67,6 @@ export const Login = () => {
             const response = await actions.registerUser(formData);
             if (response.success) {
                 setErrors({});
-                console.log("Usuario registrado con éxito");
                 navigate('/home');
             } else {
                 setErrors({ general: response.message });
