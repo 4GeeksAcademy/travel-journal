@@ -68,7 +68,6 @@ const Layout = () => {
                         <Route path="/settings" element={
                             <PrivateRoute>
                                 <UserSettings />
-                                <UserSettings />
                             </PrivateRoute>
                         } 
                         />
