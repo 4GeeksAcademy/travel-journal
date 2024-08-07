@@ -17,7 +17,7 @@ export const ResetPassword = () => {
         e.preventDefault();
 
         if (password !== confirmPassword) {
-            setError('Las contraseñas no coinciden.');
+            setError('The passwords do not match.');
             return;
         }
 
@@ -35,12 +35,12 @@ export const ResetPassword = () => {
             const data = await response.json();
 
             if (response.ok) {
-                setMessage('Contraseña restablecida con éxito.');
+                setMessage('Password reset successfully.');
             } else {
-                setError(data.msg || 'Error al restablecer la contraseña.');
+                setError(data.msg || 'Error resetting the password.');
             }
         } catch (error) {
-            setError('Hubo un problema con la solicitud. Inténtalo de nuevo más tarde.');
+            setError('There was a problem with the request. Please try again later.');
         }
     };
     return (
@@ -73,7 +73,9 @@ export const ResetPassword = () => {
                     </div>
                     {error && <div className="form-text text-danger text-start">{error}</div>}
                     {message && <div className="form-text text-success text-start">{message}</div>}
-                    <button type="submit" className="btn btn-primary">Restablecer contraseña</button>
+                    <div className="container container-btn d-flex justify-content-end">
+                        <button type="submit" className="btn btn-form">Reset password</button>
+                    </div>
                 </form>
             </div>
         </div>

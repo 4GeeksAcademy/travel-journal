@@ -25,13 +25,13 @@ export const ForgotPassword = () => {
             const data = await response.json();
 
             if (response.ok) {
-                setMessage("Te hemos enviado un correo para restablecer tu contraseña.");
+                setMessage("We have sent you an email to reset your password.");
             } else {
-                setErrors({ email: data.error || "El correo electrónico no existe en nuestra base de datos." });
+                setErrors({ email: data.error || "The email does not exist in our database." });
             }
         } catch (error) {
             console.error("Error:", error);
-            setErrors({ email: "Hubo un problema con la solicitud. Inténtalo de nuevo más tarde." });
+            setErrors({ email: "There was a problem with the request. Please try again later." });
         }
     };
 
@@ -54,7 +54,9 @@ export const ForgotPassword = () => {
                         {errors.email && <div className="form-text text-danger text-start">{errors.email}</div>}
                         {message && <div className="form-text text-success text-start">{message}</div>}
                     </div>
-                    <button type="submit" className="btn btn-primary">Enviar</button>
+                    <div className="container container-btn d-flex justify-content-end">
+                        <button type="submit" className="btn btn-form">Send</button>
+                    </div>
                 </form>
             </div>
         </div>

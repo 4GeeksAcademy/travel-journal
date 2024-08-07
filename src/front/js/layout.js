@@ -50,23 +50,24 @@ const Layout = () => {
     return (
         <div className="wrapper">
             <main className="main-content">
-                <ScrollToTop>
-                    {!isLoginPage && !isNotFound && <Navbar />}
-                    <Routes basename={basename}>
-                        <Route path="/" element={<Navigate to="/login" />} /> 
-                        <Route element={<Login />} path="/login" />
-                        <Route element={<Post />} path="/post/:theid" />
-                        <Route element={<ResetPassword />} path="/reset-password" />
-                        <Route element={<ForgotPassword />} path="/forgot-password" />
-                        <Route element={<Home />} path="/home" />
-                        <Route path="/dashboard" element={
-                            <PrivateRoute>
-                                <Dashboard />
-                            </PrivateRoute>
+            <ScrollToTop>
+                {!isLoginPage && !isNotFound && <Navbar />}
+                <Routes basename={basename}>
+                    <Route path="/" element={<Navigate to="/login" />} /> 
+                    <Route element={<Login />} path="/login" />
+                    <Route element={<Post />} path="/post/:theid" />
+                    <Route element={<ResetPassword />} path="/reset-password" />
+                    <Route element={<ForgotPassword />} path="/forgot-password" />
+                    <Route element={<Home />} path="/home" />
+                    <Route path="/dashboard" element={
+                        <PrivateRoute>
+                            <Dashboard />
+                        </PrivateRoute>
                         } 
                         />
                         <Route path="/settings" element={
                             <PrivateRoute>
+                                <UserSettings />
                                 <UserSettings />
                             </PrivateRoute>
                         } 
