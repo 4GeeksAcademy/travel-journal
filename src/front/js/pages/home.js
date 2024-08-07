@@ -3,6 +3,8 @@ import { Context } from "../store/appContext";
 import "../../styles/home.css";
 import "../../styles/index.css"
 import CardPost from "../component/cardPost";
+import { Link } from "react-router-dom";
+
 
 export const Home = () => {
     const { store, actions } = useContext(Context);
@@ -13,11 +15,15 @@ export const Home = () => {
     }, []);
 
     useEffect(() => {
+        actions.getPosts();
+    }, []);
+
+    useEffect(() => {
         actions.filterPostsByCountry();
     }, [store.selectedCountry]);
 
     const handleCountryChange = (e) => {
-        const selectedCountry = e.target.value === "Todos" ? '' : e.target.value;
+        const selectedCountry = e.target.value === "All" ? '' : e.target.value;
         actions.setSelectedCountry(selectedCountry);
         setSearchTerm("");
     };
@@ -37,7 +43,7 @@ export const Home = () => {
                     <button className="btn btn-form dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                         {store.selectedCountry || 'Select a country'}
                     </button>
-                    <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <ul className="dropdown-menu countries-dd" aria-labelledby="dropdownMenuButton1">
                         <li>
                             <input
                                 type="text"
@@ -58,7 +64,7 @@ export const Home = () => {
                     </ul>
                 </div>
             </div>
-            <h5>{store.selectedCountry || 'Select a country'}</h5>
+            <h5>{store.selectedCountry || 'All countries'}</h5>
             <div className="row">
                 {store.filteredPosts && store.filteredPosts.length > 0 ? (
                     store.filteredPosts.map(post => (
