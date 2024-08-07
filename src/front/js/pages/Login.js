@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Context } from '../store/appContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export const Login = () => {
     const { store, actions } = useContext(Context);
@@ -67,8 +67,7 @@ export const Login = () => {
             const response = await actions.registerUser(formData);
             if (response.success) {
                 setErrors({});
-                console.log("Usuario registrado con éxito");
-                navigate('/');
+                navigate('/home');
             } else {
                 setErrors({ general: response.message });
             }
@@ -99,7 +98,7 @@ export const Login = () => {
 
             if (data.access_token) {
                 setErrors({});
-                navigate('/');
+                navigate("/home");
             } else {
                 setErrors({ general: "Error en el login." });
             }
@@ -230,6 +229,12 @@ export const Login = () => {
                                     required
                                 />
                                 {errors.password && <div className="form-text text-danger text-start">{errors.password}</div>}
+                            </div>
+                            <div className="mb-3">
+                            <Link to='/forgot-password'>
+                            Have you forgotten the password?
+                            </Link>
+
                             </div>
                             {errors.general && <div className="form-text text-danger text-start">{errors.general}</div>}
                             <div className="container container-btn d-flex justify-content-end">

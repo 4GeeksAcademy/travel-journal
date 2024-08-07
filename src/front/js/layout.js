@@ -1,44 +1,83 @@
 import React from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, Navigate } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 import AddPostForm from "./pages/addPostForm";
 import { Home } from "./pages/home";
-import { Demo } from "./pages/demo";
-import { Single } from "./pages/single";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import { Login } from "./pages/Login";
 import { Post } from "./pages/Post";
+import { ForgotPassword } from "./pages/ForgotPassword";
+import { ResetPassword } from "./pages/ResetPassword";
+import { PrivateRoute } from './component/PrivateRoute';
+import { NotFound } from './component/NotFound';
 import { Dashboard } from "./pages/dashboard";
 import EditPostForm from "./pages/editPostForm";
+import UserSettings from "./pages/userSettings";
 
-//create your first component
 const Layout = () => {
     const basename = process.env.BASENAME || "";
-
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL === "") return <BackendURL />;
-
+    
     const location = useLocation();
+
+    // List of defined routes
+    const definedRoutes = [
+        "/login",
+        "/post/:theid",
+        "/reset-password",
+        "/forgot-password",
+        "/home",
+        "/dashboard",
+        "/settings",
+        "/AddAPost",
+        "/editPost/:postId",
+        "/single/:theid"
+    ];
+
+    // Function to check if the current path is defined
+    const isDefinedRoute = (path) => {
+        return definedRoutes.some(route => {
+            const regex = new RegExp(`^${route.replace(/:[^\s/]+/g, '[^/]+')}$`);
+            return regex.test(path);
+        });
+    };
+
     const isLoginPage = location.pathname === "/login";
+    const isNotFound = !isDefinedRoute(location.pathname);
 
     return (
-        <div>
+        <div className="wrapper">
+            <main className="main-content">
             <ScrollToTop>
-                {!isLoginPage && <Navbar />}
+                {!isLoginPage && !isNotFound && <Navbar />}
                 <Routes basename={basename}>
+                    <Route path="/" element={<Navigate to="/login" />} /> 
                     <Route element={<Login />} path="/login" />
                     <Route element={<Post />} path="/post/:theid" />
-                    <Route element={<Home />} path="/" />
-                    <Route element={<Demo />} path="/demo" />
-                    <Route element={<Dashboard />} path="/dashboard" />
-                    <Route element={<AddPostForm />} path="/AddAPost" />
-                    <Route element={<EditPostForm />} path="/editPost/:postId" />
-                    <Route element={<Single />} path="/single/:theid" />
-                    <Route element={<h1>Not found!</h1>} />
-                </Routes>
-                <Footer />
-            </ScrollToTop>
+                    <Route element={<ResetPassword />} path="/reset-password" />
+                    <Route element={<ForgotPassword />} path="/forgot-password" />
+                    <Route element={<Home />} path="/home" />
+                    <Route path="/dashboard" element={
+                        <PrivateRoute>
+                            <Dashboard />
+                        </PrivateRoute>
+                        } 
+                        />
+                        <Route path="/settings" element={
+                            <PrivateRoute>
+                                <UserSettings />
+                            </PrivateRoute>
+                        } 
+                        />
+                        <Route element={<AddPostForm />} path="/AddAPost" />
+                        <Route element={<EditPostForm />} path="/editPost/:postId" />
+                        <Route element={<NotFound />} path="*" />
+                    </Routes>
+                    <Footer />
+                </ScrollToTop>
+            </main>
         </div>
     );
 };

@@ -38,17 +38,12 @@ export const Home = () => {
 
 	return (
         <div className="m-5">
-            <div className="d-flex justify-content-end">
-                <Link to="/dashboard">
-                <button className="btn btn-form">My Posts</button>
-                </Link>
-                </div>
             <div className="text-center">
                 <div className="dropdown">
                     <button className="btn btn-form dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                         {store.selectedCountry || 'Select a country'}
                     </button>
-                    <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <ul className="dropdown-menu countries-dd" aria-labelledby="dropdownMenuButton1">
                         <li>
                             <input
                                 type="text"
@@ -69,7 +64,7 @@ export const Home = () => {
                     </ul>
                 </div>
             </div>
-            <h5>{store.selectedCountry || 'Select a country'}</h5>
+            <h5>{store.selectedCountry || 'All countries'}</h5>
             <div className="row">
                 {store.filteredPosts && store.filteredPosts.length > 0 ? (
                     store.filteredPosts.map(post => (

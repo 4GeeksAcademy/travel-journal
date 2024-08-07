@@ -20,3 +20,30 @@
 .like-count {
     margin-left: 5px;
 }
+
+
+.comment {
+    margin-bottom: 10px; 
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.comment-header {
+    margin-bottom: 5px;
+}
+
+.comment-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comment-content {
+    margin: 0;
+}
+
+.comment-date {
+    font-size: 0.875rem;
+    color: #666;
+    white-space: nowrap;
+}
